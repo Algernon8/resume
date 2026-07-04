@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>池一鸣 | 个人简历</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #172033;
+      --muted: #697386;
+      --primary: #245bdb;
+      --primary-soft: #eaf0ff;
+      --line: #e5e9f2;
+      --shadow: 0 24px 80px rgba(30, 48, 88, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(36, 91, 219, 0.16), transparent 34rem),
+        linear-gradient(135deg, #f8fbff 0%, var(--bg) 100%);
+      line-height: 1.65;
+    }
+
+    .page {
+      width: min(1080px, calc(100% - 40px));
+      margin: 48px auto;
+      display: grid;
+      grid-template-columns: 330px 1fr;
+      gap: 24px;
+    }
+
+    aside,
+    main {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    aside {
+      padding: 32px;
+      align-self: start;
+      position: sticky;
+      top: 32px;
+    }
+
+    main {
+      padding: 36px 42px;
+    }
+
+    .avatar {
+      width: 104px;
+      height: 104px;
+      border-radius: 28px;
+      object-fit: cover;
+      display: block;
+      margin-bottom: 22px;
+      box-shadow: 0 16px 36px rgba(36, 91, 219, 0.22);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      letter-spacing: -0.04em;
+    }
+
+    .en-name {
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .headline {
+      font-size: 17px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .tag {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .info {
+      padding-top: 20px;
+      border-top: 1px solid var(--line);
+    }
+
+    .info-item {
+      margin-bottom: 16px;
+    }
+
+    .label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .value {
+      font-weight: 700;
+      word-break: break-word;
+    }
+
+    section {
+      padding: 30px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section:first-child {
+      padding-top: 0;
+    }
+
+    section:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2::before {
+      content: "";
+      width: 8px;
+      height: 20px;
+      border-radius: 99px;
+      background: var(--primary);
+      display: inline-block;
+    }
+
+    .summary {
+      font-size: 18px;
+      color: #26324a;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 22px;
+      padding: 18px 0;
+    }
+
+    .time {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .company {
+      color: var(--primary);
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    li + li {
+      margin-top: 8px;
+    }
+
+    .note {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #fff8e6;
+      color: #7a4d00;
+      border: 1px solid #ffe1a3;
+      font-size: 14px;
+    }
+
+    .skill-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .skill-card {
+      padding: 16px;
+      background: #f8faff;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+    }
+
+    .skill-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    footer {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media (max-width: 860px) {
+      .page {
+        grid-template-columns: 1fr;
+        margin: 20px auto;
+      }
+
+      aside {
+        position: static;
+      }
+
+      main {
+        padding: 28px;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <aside>
+      <img class="avatar" src="https://s3-imfile.feishucdn.com/static-resource/v1/v3_0012i_b27158f8-f076-43f9-9a94-c678ec70da6g~?image_size=240x240&cut_type=&quality=&format=image&sticker_format=.webp" alt="池一鸣头像" />
+      <h1>池一鸣</h1>
+      <div class="en-name">Yiming Chi</div>
+      <p class="headline">Lark GTM Customer Success · Northern China</p>
+
+      <div class="tag-list">
+        <span class="tag">客户成功</span>
+        <span class="tag">GTM</span>
+        <span class="tag">企业协作</span>
+        <span class="tag">飞书生态</span>
+      </div>
+
+      <div class="info">
+        <div class="info-item">
+          <span class="label">邮箱</span>
+          <span class="value">chiyiming.123@bytedance.com</span>
+        </div>
+        <div class="info-item">
+          <span class="label">组织</span>
+          <span class="value">ByteDance / Lark</span>
+        </div>
+        <div class="info-item">
+          <span class="label">部门</span>
+          <span class="value">Lark GTM Customer Success-Region-Northern China</span>
+        </div>
+        <div class="info-item">
+          <span class="label">所在地</span>
+          <span class="value">中国 · 华北区域</span>
+        </div>
+      </div>
+    </aside>
+
+    <main>
+      <section>
+        <h2>个人简介</h2>
+        <p class="summary">我在字节跳动飞书团队负责 GTM 客户成功相关工作，聚焦华北区域客户的协作效率提升、产品价值落地和长期客户关系经营。熟悉飞书协同办公生态，能够连接客户业务场景、产品能力与落地路径，帮助组织更好地完成数字化协作升级。</p>
+      </section>
+
+      <section>
+        <h2>工作经历</h2>
+        <div class="timeline-item">
+          <div class="time">当前</div>
+          <div>
+            <h3>客户成功 / GTM</h3>
+            <div class="company">ByteDance · Lark / 飞书</div>
+            <ul>
+              <li>服务华北区域客户，围绕飞书产品能力推动客户在沟通、协同、项目管理和知识管理等场景中的实际落地。</li>
+              <li>识别客户组织中的关键业务问题，协同产品、解决方案、销售等团队设计可执行的推进方案。</li>
+              <li>关注客户使用深度、组织采纳和业务价值呈现，帮助客户建立持续使用和扩展的路径。</li>
+            </ul>
+          </div>
+        </div>
+        <p class="note">提示：当前版本仅使用飞书 CLI 可读取到的基础资料生成，具体项目、量化成果和任职时间可继续补充后完善。</p>
+      </section>
+
+      <section>
+        <h2>核心能力</h2>
+        <div class="skill-grid">
+          <div class="skill-card">
+            <strong>客户成功管理</strong>
+            <span>客户关系维护、价值交付、使用深度提升、续约与扩展支持。</span>
+          </div>
+          <div class="skill-card">
+            <strong>企业协作方案</strong>
+            <span>围绕沟通协作、知识沉淀、流程管理等场景设计落地路径。</span>
+          </div>
+          <div class="skill-card">
+            <strong>跨团队协同</strong>
+            <span>连接客户、销售、产品、解决方案团队，推动问题闭环。</span>
+          </div>
+          <div class="skill-card">
+            <strong>GTM 执行</strong>
+            <span>理解区域客户需求，支持增长、落地和长期经营目标。</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>可补充内容</h2>
+        <ul>
+          <li>代表客户或行业案例。</li>
+          <li>关键项目经历与个人职责。</li>
+          <li>量化成果，例如客户活跃提升、续约金额、扩展机会、落地周期缩短等。</li>
+          <li>教育背景、证书、语言能力与个人作品链接。</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <footer>Generated from authorized Lark CLI profile data. Last updated: 2026-07-04.</footer>
+</body>
+</html>
