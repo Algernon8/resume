@@ -3,71 +3,75 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>池一鸣 | 个人简历</title>
+  <title>池一鸣 | 飞书风格个人主页</title>
   <style>
     :root {
       color-scheme: light;
-      --bg: #f5f7fb;
-      --card: #ffffff;
-      --text: #172033;
-      --muted: #697386;
-      --primary: #245bdb;
-      --primary-soft: #eaf0ff;
-      --line: #e5e9f2;
-      --shadow: 0 24px 80px rgba(30, 48, 88, 0.12);
+      --feishu-blue: #3370ff;
+      --feishu-indigo: #245bdb;
+      --feishu-purple: #7b61ff;
+      --feishu-cyan: #14c0ff;
+      --feishu-green: #34c759;
+      --feishu-orange: #ff9f0a;
+      --ink: #101828;
+      --text: #25324b;
+      --muted: #667085;
+      --soft: #f4f7ff;
+      --card: rgba(255, 255, 255, 0.82);
+      --line: rgba(51, 112, 255, 0.13);
+      --shadow: 0 26px 90px rgba(30, 64, 175, 0.16);
     }
 
     * {
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(36, 91, 219, 0.16), transparent 34rem),
-        linear-gradient(135deg, #f8fbff 0%, var(--bg) 100%);
-      line-height: 1.65;
+        radial-gradient(circle at 14% 8%, rgba(51, 112, 255, 0.24), transparent 25rem),
+        radial-gradient(circle at 86% 10%, rgba(123, 97, 255, 0.18), transparent 26rem),
+        radial-gradient(circle at 74% 70%, rgba(20, 192, 255, 0.14), transparent 28rem),
+        linear-gradient(180deg, #f8fbff 0%, #eef4ff 44%, #f7f9ff 100%);
+      line-height: 1.7;
+      overflow-x: hidden;
     }
 
-    .page {
-      width: min(1080px, calc(100% - 40px));
-      margin: 48px auto;
-      display: grid;
-      grid-template-columns: 330px 1fr;
-      gap: 24px;
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 360px;
+      height: 360px;
+      border-radius: 999px;
+      filter: blur(12px);
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: -1;
     }
 
-    aside,
-    main {
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
+    body::before {
+      left: -140px;
+      top: 240px;
+      background: radial-gradient(circle, rgba(51, 112, 255, 0.14), transparent 68%);
     }
 
-    aside {
-      padding: 32px;
-      align-self: start;
-      position: sticky;
-      top: 32px;
+    body::after {
+      right: -120px;
+      bottom: 80px;
+      background: radial-gradient(circle, rgba(123, 97, 255, 0.16), transparent 70%);
     }
 
-    main {
-      padding: 36px 42px;
-    }
-
-    .avatar {
-      width: 104px;
-      height: 104px;
-      border-radius: 28px;
-      object-fit: cover;
-      display: block;
-      margin-bottom: 22px;
-      box-shadow: 0 16px 36px rgba(36, 91, 219, 0.22);
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
     h1,
@@ -77,48 +81,289 @@
       margin-top: 0;
     }
 
-    h1 {
-      font-size: 34px;
-      line-height: 1.15;
-      margin-bottom: 8px;
-      letter-spacing: -0.04em;
+    .shell {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
     }
 
-    .en-name {
-      color: var(--primary);
-      font-weight: 700;
-      margin-bottom: 16px;
+    .nav {
+      position: sticky;
+      top: 16px;
+      z-index: 20;
+      margin: 18px auto 0;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(22px);
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 999px;
+      box-shadow: 0 18px 50px rgba(51, 112, 255, 0.12);
     }
 
-    .headline {
-      font-size: 17px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      color: var(--ink);
+      padding-left: 6px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background:
+        linear-gradient(135deg, var(--feishu-blue), var(--feishu-purple));
+      box-shadow: 0 10px 24px rgba(51, 112, 255, 0.32);
+      position: relative;
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border: 2px solid #fff;
+      border-radius: 8px;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .nav-links a {
+      padding: 8px 13px;
+      border-radius: 999px;
       color: var(--muted);
-      margin-bottom: 24px;
+      font-size: 14px;
+      font-weight: 700;
     }
 
-    .tag-list {
+    .nav-links a:hover {
+      color: var(--feishu-blue);
+      background: rgba(51, 112, 255, 0.09);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 28px;
+      padding: 54px 0 26px;
+      align-items: stretch;
+    }
+
+    .hero-card,
+    .profile-card,
+    .section-card,
+    .blog-card,
+    .video-card {
+      background: var(--card);
+      border: 1px solid rgba(255, 255, 255, 0.78);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(26px);
+      border-radius: 34px;
+    }
+
+    .hero-card {
+      padding: 42px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background:
+        linear-gradient(120deg, rgba(51, 112, 255, 0.14), transparent 36%, rgba(123, 97, 255, 0.12));
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      color: var(--feishu-indigo);
+      background: rgba(51, 112, 255, 0.1);
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--feishu-green);
+      box-shadow: 0 0 0 5px rgba(52, 199, 89, 0.14);
+    }
+
+    h1 {
+      color: var(--ink);
+      font-size: clamp(44px, 7vw, 82px);
+      line-height: 0.96;
+      margin-bottom: 18px;
+      letter-spacing: -0.07em;
+    }
+
+    .gradient-text {
+      background: linear-gradient(110deg, var(--feishu-blue), var(--feishu-purple) 62%, var(--feishu-cyan));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-subtitle {
+      max-width: 680px;
+      color: #344054;
+      font-size: 20px;
+      margin-bottom: 26px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 17px;
+      border-radius: 16px;
+      font-weight: 900;
+      border: 1px solid transparent;
+    }
+
+    .button.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--feishu-blue), var(--feishu-purple));
+      box-shadow: 0 14px 28px rgba(51, 112, 255, 0.26);
+    }
+
+    .button.secondary {
+      color: var(--feishu-indigo);
+      background: rgba(255, 255, 255, 0.78);
+      border-color: rgba(51, 112, 255, 0.16);
+    }
+
+    .tag-cloud {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin: 24px 0;
     }
 
     .tag {
-      padding: 7px 12px;
+      padding: 8px 12px;
       border-radius: 999px;
-      background: var(--primary-soft);
-      color: var(--primary);
+      background: rgba(51, 112, 255, 0.08);
+      color: var(--feishu-indigo);
+      border: 1px solid rgba(51, 112, 255, 0.12);
       font-size: 13px;
+      font-weight: 800;
+    }
+
+    .tag.purple {
+      color: #6841d9;
+      background: rgba(123, 97, 255, 0.1);
+      border-color: rgba(123, 97, 255, 0.13);
+    }
+
+    .tag.cyan {
+      color: #077ea5;
+      background: rgba(20, 192, 255, 0.1);
+      border-color: rgba(20, 192, 255, 0.13);
+    }
+
+    .tag.orange {
+      color: #9a5b00;
+      background: rgba(255, 159, 10, 0.12);
+      border-color: rgba(255, 159, 10, 0.18);
+    }
+
+    .profile-card {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .profile-card::before {
+      content: "";
+      position: absolute;
+      top: -90px;
+      right: -70px;
+      width: 230px;
+      height: 230px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(51, 112, 255, 0.22), rgba(123, 97, 255, 0.14));
+    }
+
+    .profile-top {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 24px;
+    }
+
+    .avatar-wrap {
+      padding: 4px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, var(--feishu-blue), var(--feishu-purple), var(--feishu-cyan));
+      box-shadow: 0 18px 38px rgba(51, 112, 255, 0.24);
+    }
+
+    .avatar {
+      width: 112px;
+      height: 112px;
+      border-radius: 24px;
+      display: block;
+      object-fit: cover;
+      border: 4px solid #fff;
+    }
+
+    .profile-name h2 {
+      color: var(--ink);
+      font-size: 28px;
+      margin-bottom: 2px;
+      letter-spacing: -0.04em;
+    }
+
+    .profile-name p {
+      color: var(--muted);
+      margin-bottom: 0;
       font-weight: 700;
     }
 
-    .info {
-      padding-top: 20px;
-      border-top: 1px solid var(--line);
+    .contact-grid {
+      display: grid;
+      gap: 12px;
+      position: relative;
     }
 
-    .info-item {
-      margin-bottom: 16px;
+    .contact-item {
+      padding: 14px 15px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.66);
+      border: 1px solid rgba(51, 112, 255, 0.11);
     }
 
     .label {
@@ -127,71 +372,161 @@
       font-size: 12px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
+      font-weight: 800;
     }
 
     .value {
-      font-weight: 700;
+      color: var(--ink);
+      font-weight: 900;
       word-break: break-word;
     }
 
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(244, 247, 255, 0.86));
+      border: 1px solid rgba(51, 112, 255, 0.12);
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--feishu-blue);
+      font-size: 24px;
+      line-height: 1;
+      margin-bottom: 7px;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
     section {
-      padding: 30px 0;
-      border-bottom: 1px solid var(--line);
+      margin: 28px 0;
     }
 
-    section:first-child {
-      padding-top: 0;
+    .section-card {
+      padding: 32px;
     }
 
-    section:last-child {
-      border-bottom: 0;
-      padding-bottom: 0;
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .kicker {
+      color: var(--feishu-blue);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 5px;
     }
 
     h2 {
-      font-size: 18px;
-      margin-bottom: 16px;
+      color: var(--ink);
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.1;
+      letter-spacing: -0.05em;
+      margin-bottom: 0;
+    }
+
+    .section-desc {
+      color: var(--muted);
+      max-width: 420px;
+      margin-bottom: 0;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 20px;
+    }
+
+    .quote-card {
+      padding: 26px;
+      border-radius: 26px;
+      color: #fff;
+      background:
+        radial-gradient(circle at top right, rgba(255, 255, 255, 0.2), transparent 18rem),
+        linear-gradient(135deg, var(--feishu-blue), var(--feishu-purple));
+      min-height: 260px;
       display: flex;
-      align-items: center;
-      gap: 10px;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 22px 50px rgba(51, 112, 255, 0.28);
     }
 
-    h2::before {
-      content: "";
-      width: 8px;
-      height: 20px;
-      border-radius: 99px;
-      background: var(--primary);
-      display: inline-block;
+    .quote-card p {
+      font-size: 24px;
+      line-height: 1.35;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 22px;
     }
 
-    .summary {
-      font-size: 18px;
-      color: #26324a;
+    .quote-card span {
+      opacity: 0.86;
+      font-weight: 800;
+    }
+
+    .story-copy {
+      display: grid;
+      gap: 14px;
+    }
+
+    .story-copy p {
+      padding: 20px;
+      margin-bottom: 0;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--line);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 16px;
     }
 
     .timeline-item {
       display: grid;
-      grid-template-columns: 160px 1fr;
+      grid-template-columns: 150px 1fr;
       gap: 22px;
-      padding: 18px 0;
+      padding: 20px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 1px solid var(--line);
     }
 
     .time {
-      color: var(--muted);
-      font-weight: 700;
+      color: var(--feishu-blue);
+      font-weight: 1000;
     }
 
     h3 {
-      font-size: 20px;
-      margin-bottom: 4px;
+      color: var(--ink);
+      font-size: 21px;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      letter-spacing: -0.03em;
     }
 
     .company {
-      color: var(--primary);
-      font-weight: 800;
-      margin-bottom: 10px;
+      color: var(--muted);
+      font-weight: 900;
+      margin-bottom: 12px;
     }
 
     ul {
@@ -203,166 +538,352 @@
       margin-top: 8px;
     }
 
-    .note {
-      padding: 14px 16px;
-      border-radius: 16px;
-      background: #fff8e6;
-      color: #7a4d00;
-      border: 1px solid #ffe1a3;
-      font-size: 14px;
+    .grid-3,
+    .grid-2 {
+      display: grid;
+      gap: 16px;
     }
 
-    .skill-grid {
-      display: grid;
+    .grid-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid-2 {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+    }
+
+    .blog-card,
+    .video-card {
+      padding: 22px;
+      box-shadow: 0 18px 50px rgba(30, 64, 175, 0.1);
+    }
+
+    .blog-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .blog-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 24px 60px rgba(51, 112, 255, 0.16);
+    }
+
+    .blog-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .blog-card p {
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .mini-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .mini-tag {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--feishu-indigo);
+      font-size: 12px;
+      font-weight: 900;
     }
 
     .skill-card {
-      padding: 16px;
-      background: #f8faff;
+      padding: 22px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.7);
       border: 1px solid var(--line);
-      border-radius: 18px;
+      min-height: 176px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-card::before {
+      content: attr(data-index);
+      position: absolute;
+      right: 16px;
+      top: 10px;
+      color: rgba(51, 112, 255, 0.08);
+      font-size: 52px;
+      font-weight: 1000;
+      line-height: 1;
     }
 
     .skill-card strong {
       display: block;
-      margin-bottom: 6px;
+      color: var(--ink);
+      font-size: 18px;
+      margin-bottom: 9px;
     }
 
-    .highlight-grid {
+    .video-layout {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 18px;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 18px;
+      align-items: stretch;
     }
 
-    .highlight-card {
-      padding: 18px;
-      border-radius: 20px;
-      background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
-      border: 1px solid var(--line);
+    .video-frame {
+      min-height: 340px;
+      border-radius: 30px;
+      background:
+        linear-gradient(135deg, rgba(16, 24, 40, 0.88), rgba(36, 91, 219, 0.72)),
+        radial-gradient(circle at 30% 20%, rgba(20, 192, 255, 0.5), transparent 14rem);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
     }
 
-    .highlight-card strong {
+    .video-frame::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 24px;
+    }
+
+    .play-button {
+      width: 88px;
+      height: 88px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.42);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.24);
+      font-size: 34px;
+      padding-left: 5px;
+    }
+
+    .video-caption {
+      position: absolute;
+      left: 28px;
+      right: 28px;
+      bottom: 24px;
+    }
+
+    .video-caption strong {
       display: block;
-      color: var(--primary);
       font-size: 22px;
       margin-bottom: 4px;
     }
 
-    .project-card {
-      padding: 18px 20px;
-      border-radius: 20px;
-      background: #fbfcff;
-      border: 1px solid var(--line);
-      margin-bottom: 14px;
+    .video-list {
+      display: grid;
+      gap: 14px;
     }
 
-    .project-card h3 {
+    .video-card h3 {
       margin-bottom: 8px;
     }
 
-    .two-column {
+    .interest-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .interest-card {
+      padding: 20px;
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid var(--line);
+    }
+
+    .interest-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 1000;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--feishu-blue), var(--feishu-purple));
+    }
+
+    .note {
+      padding: 16px 18px;
+      border-radius: 22px;
+      background: rgba(255, 159, 10, 0.11);
+      color: #8a5200;
+      border: 1px solid rgba(255, 159, 10, 0.2);
+      font-size: 14px;
+      font-weight: 700;
+      margin-top: 16px;
     }
 
     footer {
-      margin-top: 24px;
+      padding: 34px 0 46px;
       color: var(--muted);
-      font-size: 13px;
       text-align: center;
+      font-size: 13px;
+      font-weight: 700;
     }
 
-    @media (max-width: 860px) {
-      .page {
+    @media (max-width: 960px) {
+      .hero,
+      .story-grid,
+      .video-layout,
+      .grid-3,
+      .grid-2,
+      .interest-grid {
         grid-template-columns: 1fr;
-        margin: 20px auto;
-      }
-
-      aside {
-        position: static;
-      }
-
-      main {
-        padding: 28px;
       }
 
       .timeline-item {
         grid-template-columns: 1fr;
-        gap: 4px;
       }
 
-      .highlight-grid,
-      .two-column,
-      .skill-grid {
+      .nav {
+        align-items: flex-start;
+        border-radius: 26px;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .shell {
+        width: min(100% - 24px, 1180px);
+      }
+
+      .hero-card,
+      .profile-card,
+      .section-card {
+        padding: 24px;
+        border-radius: 26px;
+      }
+
+      .stats {
         grid-template-columns: 1fr;
+      }
+
+      .profile-top {
+        align-items: flex-start;
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <aside>
-      <img class="avatar" src="https://s3-imfile.feishucdn.com/static-resource/v1/v3_0012i_b27158f8-f076-43f9-9a94-c678ec70da6g~?image_size=240x240&cut_type=&quality=&format=image&sticker_format=.webp" alt="池一鸣头像" />
-      <h1>池一鸣</h1>
-      <div class="en-name">Yiming Chi</div>
-      <p class="headline">Lark GTM Customer Success · Northern China</p>
+  <nav class="shell nav">
+    <a class="brand" href="#top" aria-label="返回顶部">
+      <span class="brand-mark"></span>
+      <span>Yiming's Space</span>
+    </a>
+    <div class="nav-links">
+      <a href="#story">故事</a>
+      <a href="#work">经历</a>
+      <a href="#blog">博客</a>
+      <a href="#video">视频</a>
+      <a href="#interests">兴趣</a>
+    </div>
+  </nav>
 
-      <div class="tag-list">
-        <span class="tag">客户成功</span>
-        <span class="tag">GTM</span>
-        <span class="tag">企业协作</span>
-        <span class="tag">飞书生态</span>
-        <span class="tag">方案落地</span>
-        <span class="tag">跨团队协同</span>
+  <header class="shell hero" id="top">
+    <div class="hero-card">
+      <div class="hero-content">
+        <div class="eyebrow"><span class="eyebrow-dot"></span>ByteDance · Lark GTM Customer Success</div>
+        <h1>把协作工具，变成组织真正使用的<span class="gradient-text">工作方式</span>。</h1>
+        <p class="hero-subtitle">你好，我是池一鸣。现在在字节跳动飞书团队，聚焦华北区域客户成功与 GTM 落地，喜欢把复杂的客户问题拆成清晰、可推进、能复盘的解决路径。</p>
+        <div class="hero-actions">
+          <a class="button primary" href="mailto:chiyiming.123@bytedance.com">联系我</a>
+          <a class="button secondary" href="https://github.com/Algernon8/resume">GitHub 简历仓库</a>
+        </div>
+        <div class="tag-cloud" aria-label="个人标签">
+          <span class="tag">#客户成功</span>
+          <span class="tag purple">#飞书生态</span>
+          <span class="tag cyan">#GTM</span>
+          <span class="tag">#企业协作</span>
+          <span class="tag orange">#价值落地</span>
+          <span class="tag purple">#跨团队协同</span>
+          <span class="tag cyan">#结构化表达</span>
+        </div>
       </div>
+    </div>
 
-      <div class="info">
-        <div class="info-item">
-          <span class="label">邮箱</span>
-          <span class="value">chiyiming.123@bytedance.com</span>
+    <aside class="profile-card">
+      <div>
+        <div class="profile-top">
+          <div class="avatar-wrap">
+            <img class="avatar" src="https://s3-imfile.feishucdn.com/static-resource/v1/v3_0012i_b27158f8-f076-43f9-9a94-c678ec70da6g~?image_size=240x240&cut_type=&quality=&format=image&sticker_format=.webp" alt="池一鸣头像" />
+          </div>
+          <div class="profile-name">
+            <h2>池一鸣</h2>
+            <p>Yiming Chi</p>
+          </div>
         </div>
-        <div class="info-item">
-          <span class="label">组织</span>
-          <span class="value">ByteDance / Lark</span>
+        <div class="contact-grid">
+          <div class="contact-item">
+            <span class="label">Email</span>
+            <span class="value">chiyiming.123@bytedance.com</span>
+          </div>
+          <div class="contact-item">
+            <span class="label">Team</span>
+            <span class="value">Lark GTM Customer Success</span>
+          </div>
+          <div class="contact-item">
+            <span class="label">Region</span>
+            <span class="value">Northern China · 华北区域</span>
+          </div>
         </div>
-        <div class="info-item">
-          <span class="label">部门</span>
-          <span class="value">Lark GTM Customer Success-Region-Northern China</span>
-        </div>
-        <div class="info-item">
-          <span class="label">所在地</span>
-          <span class="value">中国 · 华北区域</span>
-        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong>CS</strong><span>客户成功</span></div>
+        <div class="stat"><strong>GTM</strong><span>增长落地</span></div>
+        <div class="stat"><strong>Lark</strong><span>协作生态</span></div>
       </div>
     </aside>
+  </header>
 
-    <main>
-      <section>
-        <h2>个人简介</h2>
-        <p class="summary">我在字节跳动飞书团队负责 GTM 客户成功相关工作，聚焦华北区域客户的协作效率提升、产品价值落地和长期客户关系经营。我的工作重点是把客户的组织管理、业务协作和流程效率问题，转化为可执行的飞书落地方案，并协同销售、解决方案、产品与运营团队推动持续 adoption。</p>
-        <p>在客户成功工作中，我关注的不只是产品功能上线，而是客户是否真正建立了稳定的使用场景、管理机制和内部推广节奏。我习惯从客户业务目标出发，拆解关键人群、核心流程、沟通链路和数据反馈，帮助客户把飞书从“工具采购”推进到“组织协作方式升级”。</p>
-        <div class="highlight-grid">
-          <div class="highlight-card">
-            <strong>GTM</strong>
-            <span>理解区域市场和客户经营节奏，支持从机会识别到价值交付的完整闭环。</span>
-          </div>
-          <div class="highlight-card">
-            <strong>CSM</strong>
-            <span>围绕客户生命周期，推动启用、活跃、扩展和长期关系维护。</span>
-          </div>
-          <div class="highlight-card">
-            <strong>Lark</strong>
-            <span>熟悉飞书协作、知识、流程和项目管理相关场景的组合落地。</span>
-          </div>
+  <main class="shell">
+    <section id="story" class="section-card">
+      <div class="section-header">
+        <div>
+          <div class="kicker">Profile Story</div>
+          <h2>我的工作像一座桥</h2>
         </div>
-      </section>
+        <p class="section-desc">一边是客户的真实业务问题，一边是飞书的产品能力和内部资源；我的目标是让两边真正接上。</p>
+      </div>
+      <div class="story-grid">
+        <div class="quote-card">
+          <p>我不只关心“功能有没有上线”，更关心“客户有没有真的用起来”。</p>
+          <span>Customer Success · Value Delivery · Lark Adoption</span>
+        </div>
+        <div class="story-copy">
+          <p>在客户成功工作中，我关注客户是否建立了稳定的使用场景、管理机制和内部推广节奏。我习惯从客户业务目标出发，拆解关键人群、核心流程、沟通链路和数据反馈。</p>
+          <p>我会把客户的组织管理、业务协作和流程效率问题，转化为可执行的飞书落地方案，并协同销售、解决方案、产品与运营团队推动持续 adoption。</p>
+          <p>对我来说，好的客户成功不是一次漂亮的演示，而是帮助客户把工具变成日常工作方式，并在后续经营中持续看见价值。</p>
+        </div>
+      </div>
+    </section>
 
-      <section>
-        <h2>工作经历</h2>
+    <section id="work" class="section-card">
+      <div class="section-header">
+        <div>
+          <div class="kicker">Experience</div>
+          <h2>工作经历与推进方式</h2>
+        </div>
+        <p class="section-desc">聚焦客户生命周期，从价值共识、场景启动到长期经营，推动客户使用深度提升。</p>
+      </div>
+      <div class="timeline">
         <div class="timeline-item">
           <div class="time">当前</div>
           <div>
@@ -372,8 +893,6 @@
               <li>面向华北区域客户，围绕飞书产品能力推动客户在沟通协同、项目推进、知识沉淀、流程管理和组织管理等场景中的实际落地。</li>
               <li>深入理解客户组织结构、业务流程和关键角色诉求，识别影响产品采纳的阻力点，并设计分阶段推进计划。</li>
               <li>协同销售、解决方案、产品、运营和交付团队，推动从售前价值共识、试点验证、上线推广到持续经营的跨团队闭环。</li>
-              <li>通过客户访谈、使用反馈、场景复盘等方式持续发现机会点，帮助客户扩大飞书在更多团队和业务场景中的使用深度。</li>
-              <li>将客户需求和一线反馈沉淀为内部可复用的行业场景、客户案例和产品建议，支持团队提升区域客户经营效率。</li>
             </ul>
           </div>
         </div>
@@ -385,105 +904,131 @@
             <ul>
               <li>帮助客户明确飞书使用目标，例如提升跨部门协同效率、降低信息分散、规范项目推进过程、沉淀组织知识资产。</li>
               <li>结合客户成熟度制定不同推进策略：对初期客户重在场景启动和关键人群启用，对成熟客户重在深度经营和扩展机会发现。</li>
-              <li>关注客户内部 Champion、管理员和业务负责人的协作机制，推动客户形成可持续的内部运营能力。</li>
+              <li>将客户需求和一线反馈沉淀为内部可复用的行业场景、客户案例和产品建议，支持团队提升区域客户经营效率。</li>
             </ul>
           </div>
         </div>
-        <p class="note">提示：当前版本基于飞书 CLI 可读取到的基础资料扩展撰写，具体任职时间、客户名称和量化成果可在你确认后继续补充。</p>
-      </section>
+      </div>
+      <div class="note">当前内容基于飞书 CLI 可读取到的基础资料和通用工作描述整理，具体客户名称、任职时间和量化成果可继续补充。</div>
+    </section>
 
-      <section>
-        <h2>核心能力</h2>
-        <div class="skill-grid">
-          <div class="skill-card">
-            <strong>客户成功管理</strong>
-            <span>围绕客户生命周期管理关键节点，覆盖启用、活跃、价值呈现、续约支持和扩展机会识别。</span>
-          </div>
-          <div class="skill-card">
-            <strong>企业协作方案</strong>
-            <span>能够把客户的组织管理问题拆解成沟通、文档、流程、项目和知识库等可落地场景。</span>
-          </div>
-          <div class="skill-card">
-            <strong>跨团队协同</strong>
-            <span>连接客户、销售、解决方案、产品、运营和交付团队，推动复杂问题快速定位和闭环。</span>
-          </div>
-          <div class="skill-card">
-            <strong>GTM 执行</strong>
-            <span>理解区域客户需求和商业目标，支持市场洞察、客户经营、价值验证和长期增长。</span>
-          </div>
-          <div class="skill-card">
-            <strong>客户沟通与需求诊断</strong>
-            <span>通过访谈、复盘和数据线索识别客户真实诉求，区分功能问题、流程问题和组织推进问题。</span>
-          </div>
-          <div class="skill-card">
-            <strong>场景沉淀与方法复用</strong>
-            <span>将一线客户实践沉淀为可复用的话术、方案、案例和推进方法，提升团队交付效率。</span>
+    <section class="section-card">
+      <div class="section-header">
+        <div>
+          <div class="kicker">Capabilities</div>
+          <h2>我擅长的几件事</h2>
+        </div>
+        <p class="section-desc">偏方法论，也偏一线落地；既要能讲清楚，也要能推得动。</p>
+      </div>
+      <div class="grid-3">
+        <div class="skill-card" data-index="01"><strong>客户成功管理</strong><span>围绕客户生命周期管理关键节点，覆盖启用、活跃、价值呈现、续约支持和扩展机会识别。</span></div>
+        <div class="skill-card" data-index="02"><strong>企业协作方案</strong><span>把客户的组织管理问题拆解成沟通、文档、流程、项目和知识库等可落地场景。</span></div>
+        <div class="skill-card" data-index="03"><strong>跨团队协同</strong><span>连接客户、销售、解决方案、产品、运营和交付团队，推动复杂问题快速定位和闭环。</span></div>
+        <div class="skill-card" data-index="04"><strong>GTM 执行</strong><span>理解区域客户需求和商业目标，支持市场洞察、客户经营、价值验证和长期增长。</span></div>
+        <div class="skill-card" data-index="05"><strong>需求诊断</strong><span>通过访谈、复盘和数据线索识别客户真实诉求，区分功能问题、流程问题和组织推进问题。</span></div>
+        <div class="skill-card" data-index="06"><strong>场景沉淀</strong><span>将一线实践沉淀为可复用的话术、方案、案例和推进方法，提升团队交付效率。</span></div>
+      </div>
+    </section>
+
+    <section id="blog" class="section-card">
+      <div class="section-header">
+        <div>
+          <div class="kicker">Blog Style Notes</div>
+          <h2>像博客一样记录思考</h2>
+        </div>
+        <p class="section-desc">这些是可以继续扩写成文章的主题，也让主页不只是简历，更像个人工作笔记。</p>
+      </div>
+      <div class="grid-3">
+        <article class="blog-card">
+          <div class="blog-meta"><span>Work Note</span><span>5 min read</span></div>
+          <h3>从“上线”到“用起来”，中间差了什么？</h3>
+          <p>客户成功的关键不是把功能讲完，而是帮助客户找到真实场景、关键角色和持续运营机制。</p>
+          <div class="mini-tags"><span class="mini-tag">客户成功</span><span class="mini-tag">Adoption</span></div>
+        </article>
+        <article class="blog-card">
+          <div class="blog-meta"><span>Field Note</span><span>4 min read</span></div>
+          <h3>企业协作工具的价值，往往藏在流程里</h3>
+          <p>沟通效率、知识沉淀和项目推进不是孤立问题，需要从组织运行方式里找到切入口。</p>
+          <div class="mini-tags"><span class="mini-tag">协作效率</span><span class="mini-tag">流程管理</span></div>
+        </article>
+        <article class="blog-card">
+          <div class="blog-meta"><span>Reflection</span><span>3 min read</span></div>
+          <h3>好的 GTM，不只是增长动作</h3>
+          <p>区域客户经营需要兼顾客户需求、商业目标、产品边界和内部协同，最终沉淀成可复用打法。</p>
+          <div class="mini-tags"><span class="mini-tag">GTM</span><span class="mini-tag">区域经营</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="video" class="section-card">
+      <div class="section-header">
+        <div>
+          <div class="kicker">Video</div>
+          <h2>视频展示区</h2>
+        </div>
+        <p class="section-desc">这里可以放自我介绍、客户成功方法论分享，或未来的视频作品。</p>
+      </div>
+      <div class="video-layout">
+        <div class="video-frame" aria-label="视频占位区">
+          <div class="play-button">▶</div>
+          <div class="video-caption">
+            <strong>一分钟认识我</strong>
+            <span>未来可替换为真实视频链接或嵌入播放器。</span>
           </div>
         </div>
-      </section>
-
-      <section>
-        <h2>代表性项目场景</h2>
-        <div class="project-card">
-          <h3>组织协同效率提升</h3>
-          <ul>
-            <li>面向跨部门协作频繁、信息分散明显的客户，梳理关键业务链路和沟通节点，推动客户使用飞书建立更统一的协作入口。</li>
-            <li>围绕群组、文档、知识库、任务和会议等能力设计组合场景，帮助客户减少信息割裂和重复沟通。</li>
-            <li>推动客户内部管理员和业务负责人建立运营机制，让产品使用从单点尝试走向组织化推广。</li>
-          </ul>
-        </div>
-        <div class="project-card">
-          <h3>客户上线与推广陪跑</h3>
-          <ul>
-            <li>根据客户规模、组织结构和使用基础，拆解上线节奏，明确试点团队、核心场景、培训安排和反馈闭环。</li>
-            <li>协同内部团队处理上线过程中的权限、使用习惯、场景适配和管理预期问题，降低客户迁移和推广阻力。</li>
-            <li>通过阶段性复盘帮助客户识别下一步扩展方向，推动产品使用从基础沟通延伸到流程和业务管理。</li>
-          </ul>
-        </div>
-        <div class="project-card">
-          <h3>客户反馈与产品改进连接</h3>
-          <ul>
-            <li>收集客户在真实业务场景中的使用反馈，区分个性化诉求、通用场景需求和产品体验问题。</li>
-            <li>将高频问题整理成结构化反馈，协同产品和解决方案团队判断优先级和可行路径。</li>
-            <li>在客户侧同步合理预期，在内部侧推动问题可追踪，提升客户对服务质量和产品迭代的信任感。</li>
-          </ul>
-        </div>
-      </section>
-
-      <section>
-        <h2>工作方式与个人优势</h2>
-        <div class="two-column">
-          <div>
-            <h3>结构化推进</h3>
-            <ul>
-              <li>擅长把复杂客户问题拆解为目标、角色、场景、动作和里程碑。</li>
-              <li>重视阶段性复盘，通过反馈持续调整推进策略。</li>
-              <li>关注客户侧的内部推广机制，而不仅是单次培训或功能演示。</li>
-            </ul>
+        <div class="video-list">
+          <div class="video-card">
+            <h3>自我介绍视频</h3>
+            <p>适合放 60-90 秒的个人介绍：我是谁、做什么、擅长什么、希望连接什么机会。</p>
+            <div class="mini-tags"><span class="mini-tag">Intro</span><span class="mini-tag">Personal Brand</span></div>
           </div>
-          <div>
-            <h3>业务理解与沟通</h3>
-            <ul>
-              <li>能够在客户业务语言和产品能力之间建立清晰映射。</li>
-              <li>适应多角色沟通，包括业务负责人、管理员、一线使用者和内部协同团队。</li>
-              <li>在推进中兼顾客户体验、商业目标和产品边界。</li>
-            </ul>
+          <div class="video-card">
+            <h3>方法论分享</h3>
+            <p>可以放关于客户成功、飞书落地、GTM 实践的短视频，让主页更像个人内容阵地。</p>
+            <div class="mini-tags"><span class="mini-tag">CSM</span><span class="mini-tag">Lark Practice</span></div>
+          </div>
+          <div class="video-card">
+            <h3>项目复盘</h3>
+            <p>未来可把代表性项目整理成案例视频，用“背景—挑战—动作—结果”的结构呈现。</p>
+            <div class="mini-tags"><span class="mini-tag">Case Study</span><span class="mini-tag">Review</span></div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <section>
-        <h2>后续可补充信息</h2>
-        <ul>
-          <li>任职起止时间、汇报线和具体负责客户类型。</li>
-          <li>代表客户或行业案例，可按“背景—挑战—动作—结果”结构补充。</li>
-          <li>量化成果，例如客户活跃提升、续约金额、扩展机会、落地周期缩短、培训覆盖人数等。</li>
-          <li>教育背景、证书、语言能力、公开作品链接或 GitHub 主页。</li>
-        </ul>
-      </section>
-    </main>
-  </div>
+    <section id="interests" class="section-card">
+      <div class="section-header">
+        <div>
+          <div class="kicker">Interests</div>
+          <h2>工作之外，我也关心这些</h2>
+        </div>
+        <p class="section-desc">兴趣爱好让主页更有温度，也更接近博客和个人品牌页面。</p>
+      </div>
+      <div class="interest-grid">
+        <div class="interest-card">
+          <div class="interest-icon">读</div>
+          <h3>阅读与记录</h3>
+          <p>喜欢把碎片信息整理成结构化笔记，沉淀成可复用的表达和方法。</p>
+        </div>
+        <div class="interest-card">
+          <div class="interest-icon">影</div>
+          <h3>影像与表达</h3>
+          <p>关注视频、演示和视觉化表达，让复杂内容更容易被理解和传播。</p>
+        </div>
+        <div class="interest-card">
+          <div class="interest-icon">行</div>
+          <h3>城市观察</h3>
+          <p>喜欢观察不同行业、城市和组织的运行方式，理解真实世界里的协作问题。</p>
+        </div>
+        <div class="interest-card">
+          <div class="interest-icon">技</div>
+          <h3>效率工具</h3>
+          <p>对 AI、自动化和协作工具保持好奇，喜欢探索更高效的个人和团队工作流。</p>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  <footer>Generated from authorized Lark CLI profile data. Last updated: 2026-07-04.</footer>
+  <footer class="shell">Generated from authorized Lark CLI profile data · Designed with Feishu-inspired colors · Last updated: 2026-07-04</footer>
 </body>
 </html>
