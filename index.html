@@ -230,6 +230,45 @@
       margin-bottom: 6px;
     }
 
+    .highlight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .highlight-card {
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
+      border: 1px solid var(--line);
+    }
+
+    .highlight-card strong {
+      display: block;
+      color: var(--primary);
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+
+    .project-card {
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: #fbfcff;
+      border: 1px solid var(--line);
+      margin-bottom: 14px;
+    }
+
+    .project-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
     footer {
       margin-top: 24px;
       color: var(--muted);
@@ -255,6 +294,12 @@
         grid-template-columns: 1fr;
         gap: 4px;
       }
+
+      .highlight-grid,
+      .two-column,
+      .skill-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -271,6 +316,8 @@
         <span class="tag">GTM</span>
         <span class="tag">企业协作</span>
         <span class="tag">飞书生态</span>
+        <span class="tag">方案落地</span>
+        <span class="tag">跨团队协同</span>
       </div>
 
       <div class="info">
@@ -296,7 +343,22 @@
     <main>
       <section>
         <h2>个人简介</h2>
-        <p class="summary">我在字节跳动飞书团队负责 GTM 客户成功相关工作，聚焦华北区域客户的协作效率提升、产品价值落地和长期客户关系经营。熟悉飞书协同办公生态，能够连接客户业务场景、产品能力与落地路径，帮助组织更好地完成数字化协作升级。</p>
+        <p class="summary">我在字节跳动飞书团队负责 GTM 客户成功相关工作，聚焦华北区域客户的协作效率提升、产品价值落地和长期客户关系经营。我的工作重点是把客户的组织管理、业务协作和流程效率问题，转化为可执行的飞书落地方案，并协同销售、解决方案、产品与运营团队推动持续 adoption。</p>
+        <p>在客户成功工作中，我关注的不只是产品功能上线，而是客户是否真正建立了稳定的使用场景、管理机制和内部推广节奏。我习惯从客户业务目标出发，拆解关键人群、核心流程、沟通链路和数据反馈，帮助客户把飞书从“工具采购”推进到“组织协作方式升级”。</p>
+        <div class="highlight-grid">
+          <div class="highlight-card">
+            <strong>GTM</strong>
+            <span>理解区域市场和客户经营节奏，支持从机会识别到价值交付的完整闭环。</span>
+          </div>
+          <div class="highlight-card">
+            <strong>CSM</strong>
+            <span>围绕客户生命周期，推动启用、活跃、扩展和长期关系维护。</span>
+          </div>
+          <div class="highlight-card">
+            <strong>Lark</strong>
+            <span>熟悉飞书协作、知识、流程和项目管理相关场景的组合落地。</span>
+          </div>
+        </div>
       </section>
 
       <section>
@@ -307,13 +369,27 @@
             <h3>客户成功 / GTM</h3>
             <div class="company">ByteDance · Lark / 飞书</div>
             <ul>
-              <li>服务华北区域客户，围绕飞书产品能力推动客户在沟通、协同、项目管理和知识管理等场景中的实际落地。</li>
-              <li>识别客户组织中的关键业务问题，协同产品、解决方案、销售等团队设计可执行的推进方案。</li>
-              <li>关注客户使用深度、组织采纳和业务价值呈现，帮助客户建立持续使用和扩展的路径。</li>
+              <li>面向华北区域客户，围绕飞书产品能力推动客户在沟通协同、项目推进、知识沉淀、流程管理和组织管理等场景中的实际落地。</li>
+              <li>深入理解客户组织结构、业务流程和关键角色诉求，识别影响产品采纳的阻力点，并设计分阶段推进计划。</li>
+              <li>协同销售、解决方案、产品、运营和交付团队，推动从售前价值共识、试点验证、上线推广到持续经营的跨团队闭环。</li>
+              <li>通过客户访谈、使用反馈、场景复盘等方式持续发现机会点，帮助客户扩大飞书在更多团队和业务场景中的使用深度。</li>
+              <li>将客户需求和一线反馈沉淀为内部可复用的行业场景、客户案例和产品建议，支持团队提升区域客户经营效率。</li>
             </ul>
           </div>
         </div>
-        <p class="note">提示：当前版本仅使用飞书 CLI 可读取到的基础资料生成，具体项目、量化成果和任职时间可继续补充后完善。</p>
+        <div class="timeline-item">
+          <div class="time">工作重点</div>
+          <div>
+            <h3>客户价值落地与长期经营</h3>
+            <div class="company">Customer Success · Value Delivery</div>
+            <ul>
+              <li>帮助客户明确飞书使用目标，例如提升跨部门协同效率、降低信息分散、规范项目推进过程、沉淀组织知识资产。</li>
+              <li>结合客户成熟度制定不同推进策略：对初期客户重在场景启动和关键人群启用，对成熟客户重在深度经营和扩展机会发现。</li>
+              <li>关注客户内部 Champion、管理员和业务负责人的协作机制，推动客户形成可持续的内部运营能力。</li>
+            </ul>
+          </div>
+        </div>
+        <p class="note">提示：当前版本基于飞书 CLI 可读取到的基础资料扩展撰写，具体任职时间、客户名称和量化成果可在你确认后继续补充。</p>
       </section>
 
       <section>
@@ -321,30 +397,88 @@
         <div class="skill-grid">
           <div class="skill-card">
             <strong>客户成功管理</strong>
-            <span>客户关系维护、价值交付、使用深度提升、续约与扩展支持。</span>
+            <span>围绕客户生命周期管理关键节点，覆盖启用、活跃、价值呈现、续约支持和扩展机会识别。</span>
           </div>
           <div class="skill-card">
             <strong>企业协作方案</strong>
-            <span>围绕沟通协作、知识沉淀、流程管理等场景设计落地路径。</span>
+            <span>能够把客户的组织管理问题拆解成沟通、文档、流程、项目和知识库等可落地场景。</span>
           </div>
           <div class="skill-card">
             <strong>跨团队协同</strong>
-            <span>连接客户、销售、产品、解决方案团队，推动问题闭环。</span>
+            <span>连接客户、销售、解决方案、产品、运营和交付团队，推动复杂问题快速定位和闭环。</span>
           </div>
           <div class="skill-card">
             <strong>GTM 执行</strong>
-            <span>理解区域客户需求，支持增长、落地和长期经营目标。</span>
+            <span>理解区域客户需求和商业目标，支持市场洞察、客户经营、价值验证和长期增长。</span>
+          </div>
+          <div class="skill-card">
+            <strong>客户沟通与需求诊断</strong>
+            <span>通过访谈、复盘和数据线索识别客户真实诉求，区分功能问题、流程问题和组织推进问题。</span>
+          </div>
+          <div class="skill-card">
+            <strong>场景沉淀与方法复用</strong>
+            <span>将一线客户实践沉淀为可复用的话术、方案、案例和推进方法，提升团队交付效率。</span>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>可补充内容</h2>
+        <h2>代表性项目场景</h2>
+        <div class="project-card">
+          <h3>组织协同效率提升</h3>
+          <ul>
+            <li>面向跨部门协作频繁、信息分散明显的客户，梳理关键业务链路和沟通节点，推动客户使用飞书建立更统一的协作入口。</li>
+            <li>围绕群组、文档、知识库、任务和会议等能力设计组合场景，帮助客户减少信息割裂和重复沟通。</li>
+            <li>推动客户内部管理员和业务负责人建立运营机制，让产品使用从单点尝试走向组织化推广。</li>
+          </ul>
+        </div>
+        <div class="project-card">
+          <h3>客户上线与推广陪跑</h3>
+          <ul>
+            <li>根据客户规模、组织结构和使用基础，拆解上线节奏，明确试点团队、核心场景、培训安排和反馈闭环。</li>
+            <li>协同内部团队处理上线过程中的权限、使用习惯、场景适配和管理预期问题，降低客户迁移和推广阻力。</li>
+            <li>通过阶段性复盘帮助客户识别下一步扩展方向，推动产品使用从基础沟通延伸到流程和业务管理。</li>
+          </ul>
+        </div>
+        <div class="project-card">
+          <h3>客户反馈与产品改进连接</h3>
+          <ul>
+            <li>收集客户在真实业务场景中的使用反馈，区分个性化诉求、通用场景需求和产品体验问题。</li>
+            <li>将高频问题整理成结构化反馈，协同产品和解决方案团队判断优先级和可行路径。</li>
+            <li>在客户侧同步合理预期，在内部侧推动问题可追踪，提升客户对服务质量和产品迭代的信任感。</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>工作方式与个人优势</h2>
+        <div class="two-column">
+          <div>
+            <h3>结构化推进</h3>
+            <ul>
+              <li>擅长把复杂客户问题拆解为目标、角色、场景、动作和里程碑。</li>
+              <li>重视阶段性复盘，通过反馈持续调整推进策略。</li>
+              <li>关注客户侧的内部推广机制，而不仅是单次培训或功能演示。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>业务理解与沟通</h3>
+            <ul>
+              <li>能够在客户业务语言和产品能力之间建立清晰映射。</li>
+              <li>适应多角色沟通，包括业务负责人、管理员、一线使用者和内部协同团队。</li>
+              <li>在推进中兼顾客户体验、商业目标和产品边界。</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>后续可补充信息</h2>
         <ul>
-          <li>代表客户或行业案例。</li>
-          <li>关键项目经历与个人职责。</li>
-          <li>量化成果，例如客户活跃提升、续约金额、扩展机会、落地周期缩短等。</li>
-          <li>教育背景、证书、语言能力与个人作品链接。</li>
+          <li>任职起止时间、汇报线和具体负责客户类型。</li>
+          <li>代表客户或行业案例，可按“背景—挑战—动作—结果”结构补充。</li>
+          <li>量化成果，例如客户活跃提升、续约金额、扩展机会、落地周期缩短、培训覆盖人数等。</li>
+          <li>教育背景、证书、语言能力、公开作品链接或 GitHub 主页。</li>
         </ul>
       </section>
     </main>
