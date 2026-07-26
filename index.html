@@ -984,6 +984,8 @@
       pointer-events: none;
       transform: translate(-50%, -50%);
       transition: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     .pixel-hero {
@@ -1323,6 +1325,10 @@
       z-index: 40;
       display: none;
       pointer-events: auto;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: none;
     }
     .dpad-row {
       display: flex;
@@ -1354,11 +1360,12 @@
     }
     .dpad-center {
       width: 48px; height: 48px;
-      display: grid;
-      place-items: center;
-      font-size: 10px;
-      color: var(--muted);
-      font-weight: 900;
+      position: relative;
+    }
+    .dpad-center .dpad-btn.action {
+      position: absolute;
+      top: -4px; left: -4px;
+      width: 56px; height: 56px;
     }
 
     /* Celebration */
@@ -2087,27 +2094,22 @@
   </div>
 
   <!-- Mobile D-pad -->
-  <div class="game-dpad">
+  <div class="game-dpad" id="gameDpad">
     <div class="dpad-row">
       <div></div>
-      <button class="dpad-btn" ontouchstart="gameStartMove(0,-1)" ontouchend="gameStopMove(0,-1)"
-              onmousedown="gameStartMove(0,-1)" onmouseup="gameStopMove(0,-1)" onmouseleave="gameStopMove(0,-1)">↑</button>
+      <button class="dpad-btn" data-dir="up">↑</button>
       <div></div>
     </div>
     <div class="dpad-row">
-      <button class="dpad-btn" ontouchstart="gameStartMove(-1,0)" ontouchend="gameStopMove(-1,0)"
-              onmousedown="gameStartMove(-1,0)" onmouseup="gameStopMove(-1,0)" onmouseleave="gameStopMove(-1,0)">←</button>
+      <button class="dpad-btn" data-dir="left">←</button>
       <div class="dpad-center">
-        <button class="dpad-btn action" ontouchstart="gameAction(); event.preventDefault()" onclick="gameAction()"
-                style="position:absolute;width:56px;height:56px;margin-top:-4px;">🌱</button>
+        <button class="dpad-btn action" id="dpadAction">🌱</button>
       </div>
-      <button class="dpad-btn" ontouchstart="gameStartMove(1,0)" ontouchend="gameStopMove(1,0)"
-              onmousedown="gameStartMove(1,0)" onmouseup="gameStopMove(1,0)" onmouseleave="gameStopMove(1,0)">→</button>
+      <button class="dpad-btn" data-dir="right">→</button>
     </div>
     <div class="dpad-row">
       <div></div>
-      <button class="dpad-btn" ontouchstart="gameStartMove(0,1)" ontouchend="gameStopMove(0,1)"
-              onmousedown="gameStartMove(0,1)" onmouseup="gameStopMove(0,1)" onmouseleave="gameStopMove(0,1)">↓</button>
+      <button class="dpad-btn" data-dir="down">↓</button>
       <div></div>
     </div>
   </div>
@@ -2816,20 +2818,120 @@
         }
       });
 
-      // ---- Touch controls (exposed globally) ----
-      const touchDir = { x: 0, y: 0 };
-      window.gameStartMove = function(dx, dy) {
-        touchDir.x += dx;
-        touchDir.y += dy;
+      // ---- Touch D-pad controls ----
+      // Use a Set of active touch identifiers to reliably track which directions are pressed
+      const activeDirs = new Set();
+
+      function setDirActive(dir, active) {
+        if (active) {
+          activeDirs.add(dir);
+        } else {
+          activeDirs.delete(dir);
+        }
+        if (activeDirs.size === 0) stopWalking();
         if (gameHint && !gameHint.classList.contains('hide')) {
           gameHint.classList.add('hide');
         }
-      };
-      window.gameStopMove = function(dx, dy) {
-        touchDir.x -= dx;
-        touchDir.y -= dy;
-        if (touchDir.x === 0 && touchDir.y === 0) stopWalking();
-      };
+      }
+
+      function getTouchDir() {
+        let dx = 0, dy = 0;
+        if (activeDirs.has('left')) dx -= 1;
+        if (activeDirs.has('right')) dx += 1;
+        if (activeDirs.has('up')) dy -= 1;
+        if (activeDirs.has('down')) dy += 1;
+        return { dx, dy };
+      }
+
+      // Set up D-pad buttons with proper touch handling
+      const dpad = document.getElementById('gameDpad');
+      if (dpad) {
+        const dirMap = {
+          'up':    { dx: 0,  dy: -1 },
+          'down':  { dx: 0,  dy: 1 },
+          'left':  { dx: -1, dy: 0 },
+          'right': { dx: 1,  dy: 0 },
+        };
+
+        dpad.querySelectorAll('.dpad-btn[data-dir]').forEach(btn => {
+          const dir = btn.dataset.dir;
+
+          // Touch events (mobile)
+          btn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            setDirActive(dir, true);
+          }, { passive: false });
+
+          btn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            setDirActive(dir, false);
+          }, { passive: false });
+
+          btn.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            setDirActive(dir, false);
+          }, { passive: false });
+
+          // Mouse events (desktop testing)
+          btn.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            setDirActive(dir, true);
+          });
+          btn.addEventListener('mouseup', (e) => {
+            e.preventDefault();
+            setDirActive(dir, false);
+          });
+          btn.addEventListener('mouseleave', (e) => {
+            e.preventDefault();
+            setDirActive(dir, false);
+          });
+        });
+
+        // Action button
+        const actionBtn = document.getElementById('dpadAction');
+        if (actionBtn) {
+          let actionTouchActive = false;
+          actionBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!actionTouchActive) {
+              actionTouchActive = true;
+              gameAction();
+            }
+          }, { passive: false });
+          actionBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            actionTouchActive = false;
+          }, { passive: false });
+          actionBtn.addEventListener('touchcancel', (e) => {
+            e.preventDefault();
+            actionTouchActive = false;
+          }, { passive: false });
+          actionBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            gameAction();
+          });
+        }
+
+        // Prevent page scrolling when touching the D-pad
+        dpad.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+        }, { passive: false });
+        dpad.addEventListener('touchmove', (e) => {
+          e.preventDefault();
+        }, { passive: false });
+      }
+
+      // Safety: reset all touch directions when page loses focus / visibility
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          activeDirs.clear();
+          stopWalking();
+        }
+      });
+      window.addEventListener('blur', () => {
+        activeDirs.clear();
+        stopWalking();
+      });
 
       // ---- Game loop ----
       function gameLoop() {
@@ -2841,9 +2943,12 @@
         if (keys['arrowup'] || keys['w']) dy -= state.speed;
         if (keys['arrowdown'] || keys['s']) dy += state.speed;
 
-        // Touch
-        dx += touchDir.x * state.speed;
-        dy += touchDir.y * state.speed;
+        // Touch D-pad (slightly slower on mobile for better control)
+        const td = getTouchDir();
+        const isMobile = 'ontouchstart' in window;
+        const touchSpeed = isMobile ? state.speed * 0.7 : state.speed;
+        dx += td.dx * touchSpeed;
+        dy += td.dy * touchSpeed;
 
         // Normalize diagonal
         if (dx !== 0 && dy !== 0) {
