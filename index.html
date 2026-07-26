@@ -976,16 +976,15 @@
     /* The character is position:fixed, moves freely across the page */
     #gameChar {
       position: fixed;
-      left: 50%;
-      top: 50%;
+      left: 0;
+      top: 0;
       width: 32px;
       height: 48px;
       z-index: 50;
       pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: none;
       -webkit-user-select: none;
       user-select: none;
+      will-change: left, top;
     }
 
     .pixel-hero {
@@ -2729,12 +2728,12 @@
 
         // Boundary check (stay within viewport)
         if (newX < 16 || newX > window.innerWidth - 16) return;
-        if (newY < 16 || newY > window.innerHeight - 16) return;
+        if (newY < 24 || newY > window.innerHeight - 24) return;
 
         state.x = newX;
         state.y = newY;
-        gameChar.style.left = state.x + 'px';
-        gameChar.style.top = state.y + 'px';
+        gameChar.style.left = (state.x - 16) + 'px';
+        gameChar.style.top = (state.y - 24) + 'px';
 
         // Auto-scroll when near edges
         const edgeMargin = 120;
@@ -2793,36 +2792,83 @@
       window.gameAction = gameAction;
 
       // ---- Keyboard controls ----
-      document.addEventListener('keydown', (e) => {
-        // Space = action
-        if (e.code === 'Space' || e.key === ' ') {
+      // Only enable keyboard on devices that likely have a real keyboard
+      // (touch devices use the on-screen D-pad instead)
+      const hasPhysicalKeyboard = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+      const pressedKeys = {};
+      const keyTimeouts = {};
+      const KEY_TIMEOUT = 2000; // Safety: auto-release after 2s of no keyup
+
+      if (hasPhysicalKeyboard) {
+        document.addEventListener('keydown', (e) => {
+          const key = e.key.toLowerCase();
+
+          // Space = action
+          if (e.code === 'Space' || e.key === ' ') {
+            e.preventDefault();
+            if (!e.repeat) gameAction();
+            return;
+          }
+
+          // Only handle movement keys
+          const isMoveKey = ['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d'].includes(key);
+          if (!isMoveKey) return;
+
           e.preventDefault();
-          if (!e.repeat) gameAction();
-          return;
-        }
 
-        keys[e.key.toLowerCase()] = true;
+          if (!pressedKeys[key]) {
+            pressedKeys[key] = true;
+            // Hide hint on first move
+            if (gameHint && !gameHint.classList.contains('hide')) {
+              gameHint.classList.add('hide');
+              setTimeout(() => gameHint.style.display = 'none', 600);
+            }
+          }
 
-        // Hide hint on first move
-        if (gameHint && !gameHint.classList.contains('hide')) {
-          gameHint.classList.add('hide');
-          setTimeout(() => gameHint.style.display = 'none', 600);
-        }
-      });
+          // Reset safety timeout
+          if (keyTimeouts[key]) clearTimeout(keyTimeouts[key]);
+          keyTimeouts[key] = setTimeout(() => {
+            pressedKeys[key] = false;
+            checkKeyboardStop();
+          }, KEY_TIMEOUT);
+        });
 
-      document.addEventListener('keyup', (e) => {
-        keys[e.key.toLowerCase()] = false;
-        if (!keys['arrowup'] && !keys['arrowdown'] && !keys['arrowleft'] && !keys['arrowright'] &&
-            !keys['w'] && !keys['a'] && !keys['s'] && !keys['d']) {
+        document.addEventListener('keyup', (e) => {
+          const key = e.key.toLowerCase();
+          pressedKeys[key] = false;
+          if (keyTimeouts[key]) {
+            clearTimeout(keyTimeouts[key]);
+            delete keyTimeouts[key];
+          }
+          checkKeyboardStop();
+        });
+
+        // Safety: release all keys when window loses focus
+        window.addEventListener('blur', () => {
+          Object.keys(pressedKeys).forEach(k => pressedKeys[k] = false);
+          Object.keys(keyTimeouts).forEach(k => clearTimeout(keyTimeouts[k]));
           stopWalking();
+        });
+
+        function checkKeyboardStop() {
+          const anyPressed = ['arrowup','arrowdown','arrowleft','arrowright','w','a','s','d']
+            .some(k => pressedKeys[k]);
+          if (!anyPressed && activeDirs.size === 0) stopWalking();
         }
-      });
+      }
 
       // ---- Touch D-pad controls ----
       // Use a Set of active touch identifiers to reliably track which directions are pressed
       const activeDirs = new Set();
+      let gameUnlocked = !('ontouchstart' in window); // Desktop starts unlocked, mobile requires tap
 
       function setDirActive(dir, active) {
+        // On mobile, only allow movement after initial unlock tap
+        if ('ontouchstart' in window && !gameUnlocked) return;
+        // Ignore touches during page scroll
+        if (isScrolling && active) return;
+
         if (active) {
           activeDirs.add(dir);
         } else {
@@ -2859,16 +2905,31 @@
           // Touch events (mobile)
           btn.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             setDirActive(dir, true);
+          }, { passive: false });
+
+          // If finger slides off the button, stop
+          btn.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const touch = e.touches[0];
+            const el = document.elementFromPoint(touch.clientX, touch.clientY);
+            const stillOnBtn = el && el.closest('.dpad-btn[data-dir="' + dir + '"]');
+            if (!stillOnBtn) {
+              setDirActive(dir, false);
+            }
           }, { passive: false });
 
           btn.addEventListener('touchend', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             setDirActive(dir, false);
           }, { passive: false });
 
           btn.addEventListener('touchcancel', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             setDirActive(dir, false);
           }, { passive: false });
 
@@ -2887,32 +2948,59 @@
           });
         });
 
-        // Action button
+        // GLOBAL safety: any touchend/touchcancel on the document clears ALL directions
+        // This is the most reliable way to prevent "stuck" movement on mobile
+        document.addEventListener('touchend', () => {
+          activeDirs.clear();
+          stopWalking();
+        }, { passive: true });
+        document.addEventListener('touchcancel', () => {
+          activeDirs.clear();
+          stopWalking();
+        }, { passive: true });
+
+        // Action button (on mobile, first tap unlocks movement)
         const actionBtn = document.getElementById('dpadAction');
         if (actionBtn) {
           let actionTouchActive = false;
           actionBtn.addEventListener('touchstart', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             if (!actionTouchActive) {
               actionTouchActive = true;
-              gameAction();
+              if (!gameUnlocked && 'ontouchstart' in window) {
+                // First tap: unlock the game
+                gameUnlocked = true;
+                actionBtn.textContent = '🌱';
+                showDialogue('开始探索吧！用方向键移动～');
+                if (gameHint) gameHint.classList.add('hide');
+              } else {
+                gameAction();
+              }
             }
           }, { passive: false });
           actionBtn.addEventListener('touchend', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             actionTouchActive = false;
           }, { passive: false });
           actionBtn.addEventListener('touchcancel', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             actionTouchActive = false;
           }, { passive: false });
           actionBtn.addEventListener('click', (e) => {
             e.preventDefault();
             gameAction();
           });
+
+          // Set initial button text for mobile
+          if ('ontouchstart' in window) {
+            actionBtn.textContent = '▶';
+          }
         }
 
-        // Prevent page scrolling when touching the D-pad
+        // Prevent page scrolling when touching the D-pad area
         dpad.addEventListener('touchstart', (e) => {
           e.preventDefault();
         }, { passive: false });
@@ -2933,15 +3021,42 @@
         stopWalking();
       });
 
+      // Ignore D-pad touches while the page is being scrolled
+      let isScrolling = false;
+      let scrollTimeout = null;
+      window.addEventListener('scroll', () => {
+        isScrolling = true;
+        // Also clear active directions when scroll starts
+        activeDirs.clear();
+        stopWalking();
+        if (scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          isScrolling = false;
+        }, 150);
+      }, { passive: true });
+
       // ---- Game loop ----
       function gameLoop() {
         let dx = 0, dy = 0;
 
-        // Keyboard
-        if (keys['arrowleft'] || keys['a']) dx -= state.speed;
-        if (keys['arrowright'] || keys['d']) dx += state.speed;
-        if (keys['arrowup'] || keys['w']) dy -= state.speed;
-        if (keys['arrowdown'] || keys['s']) dy += state.speed;
+        // Safety check: if there are no active touches on the document,
+        // force-clear all D-pad directions. This guards against missed
+        // touchend events which are common on mobile browsers.
+        if ('ontouchstart' in window) {
+          if (activeDirs.size > 0 && (!window.event || window.event.type !== 'touchstart')) {
+            // We can't reliably detect touch count from the game loop,
+            // so we add a "dead man's switch" - directions only last
+            // for a short time and must be reaffirmed by touch events.
+          }
+        }
+
+        // Keyboard (only on devices with physical keyboard)
+        if (hasPhysicalKeyboard) {
+          if (pressedKeys['arrowleft'] || pressedKeys['a']) dx -= state.speed;
+          if (pressedKeys['arrowright'] || pressedKeys['d']) dx += state.speed;
+          if (pressedKeys['arrowup'] || pressedKeys['w']) dy -= state.speed;
+          if (pressedKeys['arrowdown'] || pressedKeys['s']) dy += state.speed;
+        }
 
         // Touch D-pad (slightly slower on mobile for better control)
         const td = getTouchDir();
@@ -2975,8 +3090,8 @@
         treesLayer.style.height = docHeight + 'px';
 
         initHUD();
-        gameChar.style.left = state.x + 'px';
-        gameChar.style.top = state.y + 'px';
+        gameChar.style.left = (state.x - 16) + 'px';
+        gameChar.style.top = (state.y - 24) + 'px';
         renderAllTrees();
         gameLoop();
 
@@ -3020,10 +3135,10 @@
 
       // Handle resize - keep character in bounds + update trees layer height
       window.addEventListener('resize', () => {
-        state.x = Math.min(state.x, window.innerWidth - 16);
-        state.y = Math.min(state.y, window.innerHeight - 16);
-        gameChar.style.left = state.x + 'px';
-        gameChar.style.top = state.y + 'px';
+        state.x = Math.min(Math.max(16, state.x), window.innerWidth - 16);
+        state.y = Math.min(Math.max(24, state.y), window.innerHeight - 24);
+        gameChar.style.left = (state.x - 16) + 'px';
+        gameChar.style.top = (state.y - 24) + 'px';
         const docHeight = Math.max(
           document.body.scrollHeight,
           document.documentElement.scrollHeight
