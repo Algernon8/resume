@@ -1256,13 +1256,23 @@
     .game-tree {
       position: absolute;
       pointer-events: none;
-      z-index: 30;
+      z-index: 20;
       transform-origin: bottom center;
       animation: tree-grow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      opacity: 0.55;
+      mix-blend-mode: multiply;
+      transition: opacity 0.3s ease;
+    }
+    .game-tree:hover {
+      opacity: 0.9;
+    }
+    [data-theme="dark"] .game-tree {
+      mix-blend-mode: screen;
+      opacity: 0.6;
     }
     @keyframes tree-grow {
       0% { transform: scaleY(0) scaleX(0.5); opacity: 0; }
-      100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+      100% { transform: scaleY(0.75) scaleX(0.75); opacity: 0.55; }
     }
     .game-tree-trunk {
       position: absolute;
@@ -1297,6 +1307,7 @@
       white-space: nowrap;
       box-shadow: 2px 2px 0 rgba(60,36,24,0.3);
       animation: fruit-appear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s backwards;
+      opacity: 0.85;
     }
     @keyframes fruit-appear {
       0% { transform: scale(0); opacity: 0; }
@@ -2483,10 +2494,22 @@
           return;
         }
 
-        // Plant the tree at character position
+        // Plant the tree at the LEFT EDGE of the current section
+        // (so it doesn't block the text content in the middle)
+        const sectionEl = document.querySelector(currentSection.selector);
+        let treeX = state.x;
+        let treeY = state.y;
+        if (sectionEl) {
+          const r = sectionEl.getBoundingClientRect();
+          // Snap to left side of the section (with some padding)
+          treeX = r.left + 30 + Math.random() * 20;
+          // Position near the top of the section
+          treeY = r.top + 50 + Math.random() * 30;
+        }
+
         state.trees[currentSection.id] = {
-          x: state.x,
-          y: state.y,
+          x: treeX,
+          y: treeY,
           zoneId: currentSection.id,
         };
         saveProgress();
@@ -2501,20 +2524,24 @@
       function createTreeElement(treeData, zone) {
         const tree = document.createElement('div');
         tree.className = 'game-tree';
-        tree.style.left = (treeData.x - 30) + 'px';
-        tree.style.top = (treeData.y - 60) + 'px';
+        const treeW = 70;
+        const treeH = 80;
+        tree.style.left = (treeData.x - treeW / 2) + 'px';
+        tree.style.top = (treeData.y - treeH) + 'px';
+        tree.style.width = treeW + 'px';
+        tree.style.height = treeH + 'px';
 
         const trunk = document.createElement('div');
         trunk.className = 'game-tree-trunk';
-        const trunkH = 40;
+        const trunkH = 32;
         trunk.style.height = trunkH + 'px';
 
         const leaves = document.createElement('div');
         leaves.className = 'game-tree-leaves';
-        const leafSize = 56;
+        const leafSize = 44;
         leaves.style.width = leafSize + 'px';
         leaves.style.height = leafSize + 'px';
-        leaves.style.bottom = (trunkH - 10) + 'px';
+        leaves.style.bottom = (trunkH - 8) + 'px';
 
         // Color by zone type
         const colors = {
@@ -2536,13 +2563,15 @@
           const f = document.createElement('div');
           f.className = 'tree-fruit';
           f.textContent = fruit;
-          // Position around the leaves
+          // Position around the leaves (in an orbit)
           const angle = (i / fruits.length) * Math.PI * 2 - Math.PI / 2;
-          const radius = leafSize * 0.5 + 10;
-          const fx = Math.cos(angle) * radius + leafSize / 2 + 20 - 10;
-          const fy = Math.sin(angle) * radius + leafSize / 2 + 20 - 10;
-          f.style.left = (fx + 10) + 'px';
-          f.style.top = (fy + 20) + 'px';
+          const radius = leafSize * 0.5 + 6;
+          const fx = leafSize / 2 + 13 + Math.cos(angle) * radius - 10;
+          const fy = leafSize / 2 + 16 + Math.sin(angle) * radius - 6;
+          f.style.left = fx + 'px';
+          f.style.top = fy + 'px';
+          f.style.fontSize = '8px';
+          f.style.padding = '1px 4px';
           f.style.animationDelay = (0.6 + i * 0.1) + 's';
           fruitsContainer.appendChild(f);
         });
