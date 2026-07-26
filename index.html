@@ -3,14 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>池一鸣 | AI × 金融 × 运营</title>
+  <title>池一鸣 · YIMING.CV | AI × 金融 × 运营</title>
+  <meta name="description" content="池一鸣 — 金融与计算机复合背景，飞书商业化 CSM，专注 AI 应用落地与业务运营闭环。" />
   <style>
+    /* ============================================================
+       DESIGN TOKENS
+       ============================================================ */
     :root {
       color-scheme: light;
       --bg: #fff3d7;
       --bg-2: #ffe4b8;
       --paper: #fff9ea;
       --paper-2: #fff0ce;
+      --paper-3: #ffe8b8;
       --ink: #2f1c13;
       --text: #5a3a29;
       --muted: #936d52;
@@ -23,7 +28,8 @@
       --sky: #80c7e8;
       --pixel-shadow: 6px 6px 0 #3c2418;
       --pixel-shadow-soft: 4px 4px 0 rgba(60, 36, 24, 0.22);
-      --content: 1100px;
+      --pixel-shadow-lg: 8px 8px 0 #3c2418;
+      --content: 1180px;
     }
 
     [data-theme="dark"] {
@@ -32,6 +38,7 @@
       --bg-2: #2b1a12;
       --paper: #2f2119;
       --paper-2: #3a281d;
+      --paper-3: #442e21;
       --ink: #fff0d3;
       --text: #e5c7a7;
       --muted: #bd9678;
@@ -44,19 +51,16 @@
       --sky: #71b5d6;
       --pixel-shadow: 6px 6px 0 #090605;
       --pixel-shadow-soft: 4px 4px 0 rgba(0, 0, 0, 0.38);
+      --pixel-shadow-lg: 8px 8px 0 #090605;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       min-height: 100vh;
+      padding-bottom: 80px;
       color: var(--text);
       background:
         linear-gradient(45deg, rgba(60, 36, 24, 0.04) 25%, transparent 25%) 0 0 / 24px 24px,
@@ -71,28 +75,11 @@
       overflow-x: hidden;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    a { color: inherit; text-decoration: none; }
+    p, h1, h2, h3 { margin-top: 0; }
+    p, li { text-wrap: pretty; }
 
-    p,
-    h1,
-    h2,
-    h3 {
-      margin-top: 0;
-    }
-
-    p,
-    li {
-      text-wrap: pretty;
-    }
-
-    h1,
-    h2,
-    h3,
-    .brand-title,
-    .hero-name {
+    h1, h2, h3, .brand-title, .hero-name, .stat-num {
       color: var(--ink);
       font-family: "Courier New", "SFMono-Regular", Consolas, "PingFang SC", monospace;
       font-weight: 900;
@@ -110,6 +97,9 @@
       box-shadow: var(--pixel-shadow);
     }
 
+    /* ============================================================
+       TOP NAV
+       ============================================================ */
     .topbar {
       position: sticky;
       top: 16px;
@@ -137,35 +127,24 @@
       background: var(--accent-2);
       box-shadow: 4px 4px 0 var(--line);
     }
-
-    .brand-mark::before,
+    .brand-mark::before {
+      content: "";
+      position: absolute;
+      left: 6px; top: 6px;
+      width: 8px; height: 8px;
+      background: var(--accent);
+      box-shadow: 12px 0 0 var(--accent-4), 0 12px 0 var(--accent-3), 12px 12px 0 var(--sky);
+    }
     .brand-mark::after {
       content: "";
       position: absolute;
-      background: var(--accent);
-    }
-
-    .brand-mark::before {
-      left: 6px;
-      top: 6px;
-      width: 8px;
-      height: 8px;
-      box-shadow: 12px 0 0 var(--accent-4), 0 12px 0 var(--accent-3), 12px 12px 0 var(--sky);
-    }
-
-    .brand-mark::after {
-      right: -7px;
-      bottom: -7px;
-      width: 8px;
-      height: 8px;
+      right: -7px; bottom: -7px;
+      width: 8px; height: 8px;
       border: 3px solid var(--line);
       background: var(--paper);
     }
 
-    .brand-title {
-      color: var(--ink);
-      font-size: 18px;
-    }
+    .brand-title { font-size: 18px; }
 
     .nav {
       display: flex;
@@ -175,8 +154,7 @@
       gap: 8px;
     }
 
-    .nav a,
-    .theme-toggle {
+    .nav a, .theme-toggle {
       min-height: 34px;
       padding: 7px 10px;
       border: 2px solid transparent;
@@ -186,29 +164,30 @@
       font-size: 14px;
       font-weight: 900;
       cursor: pointer;
+      transition: all 0.12s ease;
     }
-
-    .nav a:hover,
-    .theme-toggle:hover {
+    .nav a:hover, .theme-toggle:hover {
       border-color: var(--line);
       background: var(--accent-2);
       color: #2f1c13;
       box-shadow: 3px 3px 0 var(--line);
       transform: translate(-2px, -2px);
     }
-
     .theme-toggle {
       border-color: var(--line);
       background: var(--paper-2);
       box-shadow: 3px 3px 0 var(--line);
     }
 
+    /* ============================================================
+       HERO
+       ============================================================ */
     .hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.08fr) 360px;
-      gap: 36px;
+      grid-template-columns: minmax(0, 1.1fr) 400px;
+      gap: 40px;
       align-items: center;
-      padding: 74px 0 58px;
+      padding: 80px 0 60px;
     }
 
     .hero-kicker {
@@ -220,40 +199,39 @@
       border: 3px solid var(--line);
       background: var(--paper);
       box-shadow: var(--pixel-shadow-soft);
-      color: var(--text);
       font-size: 14px;
       font-weight: 900;
     }
 
     .status-dot {
-      width: 12px;
-      height: 12px;
+      width: 12px; height: 12px;
       background: var(--accent-3);
       border: 2px solid var(--line);
-      box-shadow: 4px 0 0 var(--accent-2), 8px 0 0 var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 4px 0 0 var(--accent-2), 8px 0 0 var(--accent); }
+      50% { box-shadow: 4px 0 0 var(--accent-2), 8px 0 0 var(--accent), 0 0 0 4px rgba(119, 168, 106, 0.3); }
     }
 
     h1 {
       max-width: 790px;
       margin-bottom: 26px;
-      color: var(--ink);
-      font-size: clamp(42px, 7.5vw, 86px);
-      line-height: 1;
+      font-size: clamp(38px, 6.5vw, 76px);
+      line-height: 1.05;
       text-shadow: 3px 3px 0 rgba(255, 184, 77, 0.38);
     }
 
     .highlight {
       display: inline;
       padding: 0 0.08em;
-      background:
-        linear-gradient(transparent 58%, var(--accent-2) 58% 86%, transparent 86%);
+      background: linear-gradient(transparent 58%, var(--accent-2) 58% 86%, transparent 86%);
       color: var(--ink);
     }
 
     .hero-copy {
       max-width: 700px;
-      margin-bottom: 28px;
-      color: var(--text);
+      margin-bottom: 32px;
       font-size: clamp(17px, 2vw, 20px);
       line-height: 1.82;
     }
@@ -262,7 +240,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 14px;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
     }
 
     .button {
@@ -277,36 +255,26 @@
       box-shadow: 4px 4px 0 var(--line);
       font-weight: 900;
       transition: transform 0.12s ease, box-shadow 0.12s ease;
+      cursor: pointer;
     }
-
     .button:hover {
       transform: translate(2px, 2px);
       box-shadow: 2px 2px 0 var(--line);
     }
-
-    .button.primary {
-      background: var(--accent);
-      color: #fff9ea;
-    }
-
-    .button.secondary {
-      background: var(--accent-2);
-      color: #2f1c13;
-    }
+    .button.primary { background: var(--accent); color: #fff9ea; }
+    .button.secondary { background: var(--accent-2); color: #2f1c13; }
+    .button.ghost { background: transparent; }
 
     .tag-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
     }
-
-    .tag,
-    .pill,
-    .small-meta span {
+    .tag, .pill, .small-meta span {
       display: inline-flex;
       align-items: center;
       min-height: 28px;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border: 2px solid var(--line);
       background: var(--paper-2);
       color: var(--text);
@@ -315,6 +283,39 @@
       font-weight: 900;
     }
 
+    /* Stats strip */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 36px;
+    }
+    .stat-card {
+      padding: 18px 14px;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow-soft);
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-num {
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1;
+      margin-bottom: 6px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* Profile card (right side) */
     .profile-card {
       position: relative;
       padding: 22px;
@@ -324,53 +325,56 @@
     .profile-card::before {
       content: "";
       position: absolute;
-      right: 18px;
-      top: 18px;
-      width: 78px;
-      height: 78px;
+      right: 18px; top: 18px;
+      width: 78px; height: 78px;
       background: var(--accent-2);
       border: 3px solid var(--line);
       box-shadow: inset 18px 0 0 rgba(255, 255, 255, 0.22), 5px 5px 0 var(--line);
       opacity: 0.8;
     }
 
-    .pixel-avatar-scene {
+    .avatar-scene {
       position: relative;
-      height: 210px;
+      height: 260px;
       margin-bottom: 22px;
       border: 3px solid var(--line);
       background:
-        linear-gradient(var(--sky) 0 48%, var(--accent-3) 48% 63%, #8a5a36 63% 100%);
+        linear-gradient(var(--sky) 0 50%, var(--accent-3) 50% 65%, #8a5a36 65% 100%);
       overflow: hidden;
       box-shadow: 4px 4px 0 var(--line);
     }
 
     .sun {
       position: absolute;
-      right: 26px;
-      top: 24px;
-      width: 42px;
-      height: 42px;
+      right: 26px; top: 24px;
+      width: 42px; height: 42px;
       background: var(--accent-2);
       border: 3px solid var(--line);
-      box-shadow: 6px 0 0 rgba(255, 255, 255, 0.28), 0 6px 0 rgba(255, 255, 255, 0.18);
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
     }
 
     .cloud {
       position: absolute;
-      left: 24px;
-      top: 34px;
-      width: 28px;
-      height: 18px;
+      left: 24px; top: 34px;
+      width: 28px; height: 18px;
       background: #fff9ea;
       border: 3px solid var(--line);
       box-shadow: 24px 0 0 #fff9ea, 48px 8px 0 #fff9ea;
+      animation: drift 12s linear infinite;
+    }
+    @keyframes drift {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(40px); }
     }
 
     .pixel-person {
       position: absolute;
       left: 50%;
-      bottom: 34px;
+      bottom: 50px;
       width: 18px;
       height: 18px;
       transform: translateX(-50%);
@@ -384,70 +388,110 @@
         18px 36px 0 0 var(--accent-4),
         -9px 54px 0 0 var(--line),
         9px 54px 0 0 var(--line);
+      animation: bob 2s ease-in-out infinite;
+    }
+    @keyframes bob {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-4px); }
     }
 
-    .avatar-photo {
+    .avatar-main {
       position: absolute;
-      left: 18px;
-      bottom: 18px;
-      width: 78px;
-      height: 78px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -55%);
+      width: 130px;
+      height: 130px;
       object-fit: cover;
-      border: 3px solid var(--line);
-      box-shadow: 4px 4px 0 var(--line);
+      border: 4px solid var(--line);
+      border-radius: 50%;
+      box-shadow: 6px 6px 0 var(--line);
       image-rendering: auto;
+      background: var(--paper);
+    }
+
+    /* Photo strip */
+    .photo-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .photo-thumb {
+      aspect-ratio: 1;
+      border: 2px solid var(--line);
+      background: var(--paper-2);
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .photo-thumb:hover { transform: scale(1.05); }
+    .photo-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      image-rendering: auto;
+    }
+    .photo-thumb-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      text-align: center;
+      padding: 4px;
     }
 
     .hero-name {
       margin-bottom: 4px;
-      color: var(--ink);
-      font-size: 32px;
+      font-size: 28px;
       line-height: 1.1;
       text-shadow: 2px 2px 0 rgba(255, 184, 77, 0.34);
     }
 
     .profile-role {
-      margin-bottom: 20px;
-      color: var(--text);
+      margin-bottom: 16px;
       font-weight: 900;
+      font-size: 14px;
     }
 
     .info-list {
       display: grid;
-      gap: 10px;
+      gap: 8px;
     }
-
     .info-item {
-      padding: 12px;
-      border: 3px solid var(--line);
+      padding: 10px;
+      border: 2px solid var(--line);
       background: var(--paper-2);
-      box-shadow: 3px 3px 0 rgba(60, 36, 24, 0.18);
+      box-shadow: 2px 2px 0 rgba(60, 36, 24, 0.18);
     }
-
     .label {
       display: block;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 900;
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
-
     .value {
       color: var(--ink);
       font-weight: 900;
+      font-size: 13px;
       word-break: break-word;
     }
 
+    /* ============================================================
+       SECTIONS
+       ============================================================ */
     .section {
       display: grid;
-      grid-template-columns: 230px minmax(0, 1fr);
+      grid-template-columns: 260px minmax(0, 1fr);
       gap: 52px;
-      padding: 58px 0;
+      padding: 70px 0;
       border-top: 3px dashed rgba(60, 36, 24, 0.28);
     }
-
     [data-theme="dark"] .section {
       border-top-color: rgba(246, 212, 166, 0.3);
     }
@@ -457,7 +501,6 @@
       top: 108px;
       align-self: start;
     }
-
     .kicker {
       display: inline-flex;
       margin-bottom: 12px;
@@ -471,82 +514,128 @@
       text-transform: uppercase;
       box-shadow: 2px 2px 0 var(--line);
     }
-
     h2 {
       margin-bottom: 14px;
-      color: var(--ink);
       font-size: clamp(28px, 4vw, 44px);
       line-height: 1.08;
     }
-
     .section-desc {
       margin-bottom: 0;
       color: var(--muted);
       font-size: 15px;
     }
 
-    .intro-card,
-    .article-card,
-    .skill-card,
-    .note-card,
-    .interest-card,
-    .entry-card {
-      border: 3px solid var(--line);
-      background: var(--paper);
-      box-shadow: var(--pixel-shadow-soft);
+    /* ============================================================
+       ABOUT — 三个关键词
+       ============================================================ */
+    .about-grid {
+      display: grid;
+      gap: 18px;
     }
-
-    .intro-card {
-      position: relative;
+    .about-lead {
       padding: clamp(26px, 4vw, 40px);
+      position: relative;
+      overflow: hidden;
     }
-
-    .intro-card::after {
+    .about-lead::after {
       content: "";
       position: absolute;
-      right: 28px;
-      bottom: 24px;
-      width: 28px;
-      height: 28px;
+      right: 28px; bottom: 24px;
+      width: 28px; height: 28px;
       background: var(--accent-3);
       border: 3px solid var(--line);
       box-shadow: 18px -18px 0 var(--accent-2), -18px -10px 0 var(--accent);
     }
-
     .lead {
       max-width: 760px;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
       color: var(--ink);
       font-size: clamp(20px, 2.4vw, 28px);
       line-height: 1.5;
       font-weight: 900;
     }
-
-    .intro-card p:not(.lead) {
+    .about-lead p:not(.lead) {
       max-width: 780px;
       margin-bottom: 0;
-      color: var(--text);
     }
 
-    .entry-list {
+    .trait-grid {
       display: grid;
-      gap: 18px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
     }
+    .trait-card {
+      padding: 22px;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow-soft);
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .trait-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--line);
+    }
+    .trait-icon {
+      width: 52px; height: 52px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      border: 3px solid var(--line);
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff9ea;
+      box-shadow: 4px 4px 0 var(--line);
+    }
+    .trait-card:nth-child(1) .trait-icon { background: var(--accent); }
+    .trait-card:nth-child(2) .trait-icon { background: var(--accent-3); }
+    .trait-card:nth-child(3) .trait-icon { background: var(--accent-4); }
+    .trait-card h3 { font-size: 22px; margin-bottom: 8px; }
+    .trait-card p { margin-bottom: 0; font-size: 14px; line-height: 1.7; }
 
+    /* ============================================================
+       WORK — 精选经历
+       ============================================================ */
+    .entry-list { display: grid; gap: 20px; }
     .entry-card {
-      padding: 24px;
+      padding: 28px;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow-soft);
+      position: relative;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .entry-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--line);
+    }
+    .entry-card.featured {
+      background: linear-gradient(135deg, var(--paper) 0%, var(--paper-2) 100%);
+      border-width: 4px;
+    }
+    .entry-card.featured::before {
+      content: "★ FEATURED";
+      position: absolute;
+      top: -14px; right: 20px;
+      padding: 4px 10px;
+      background: var(--accent);
+      color: #fff9ea;
+      border: 3px solid var(--line);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      box-shadow: 3px 3px 0 var(--line);
     }
 
     .entry-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       color: var(--muted);
       font-size: 13px;
       font-weight: 900;
     }
-
     .entry-meta span {
       padding: 4px 8px;
       border: 2px solid var(--line);
@@ -554,248 +643,317 @@
     }
 
     h3 {
-      margin-bottom: 10px;
-      color: var(--ink);
-      font-size: clamp(22px, 2.8vw, 31px);
-      line-height: 1.18;
+      margin-bottom: 12px;
+      font-size: clamp(22px, 2.8vw, 28px);
+      line-height: 1.2;
     }
 
-    .entry-card p,
-    .article-card p,
-    .skill-card p,
-    .note-card p,
-    .interest-card p {
-      color: var(--text);
-    }
-
-    .entry-card p {
-      max-width: 780px;
+    .entry-card > p {
       margin-bottom: 14px;
+      max-width: 780px;
     }
 
     ul {
       margin: 14px 0 0;
       padding-left: 20px;
-      color: var(--text);
     }
-
-    li + li {
-      margin-top: 9px;
-    }
-
-    li::marker {
-      color: var(--accent);
-    }
+    li + li { margin-top: 8px; }
+    li::marker { color: var(--accent); }
 
     .pill-list {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 14px;
+      margin-top: 16px;
     }
 
-    .article-grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .article-card {
-      display: grid;
-      grid-template-columns: 74px minmax(0, 1fr);
-      gap: 18px;
-      padding: 22px;
-      transition: transform 0.12s ease, box-shadow 0.12s ease;
-    }
-
-    .article-card:hover {
-      transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0 var(--line);
-    }
-
-    .article-index,
-    .number {
-      display: grid;
-      place-items: center;
-      border: 3px solid var(--line);
-      background: var(--accent);
-      color: #fff9ea;
-      box-shadow: 4px 4px 0 var(--line);
-      font-weight: 900;
-    }
-
-    .article-index {
-      width: 58px;
-      height: 58px;
-      font-size: 22px;
-    }
-
-    .article-card h3 {
-      margin-bottom: 8px;
-      font-size: clamp(21px, 2.4vw, 29px);
-    }
-
-    .small-meta {
+    .entry-stats {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 14px;
+      margin: 18px 0 8px;
+      padding: 14px;
+      border-left: 4px solid var(--accent);
+      background: var(--paper-2);
     }
-
-    .skill-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 16px;
+    .entry-stat {
+      min-width: 90px;
     }
-
-    .skill-card {
-      min-height: 198px;
-      padding: 22px;
-    }
-
-    .number {
-      width: 42px;
-      height: 42px;
-      margin-bottom: 18px;
-      font-size: 18px;
-    }
-
-    .skill-card h3 {
+    .entry-stat-num {
       font-size: 22px;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .entry-stat-label {
+      font-size: 11px;
+      font-weight: 900;
+      color: var(--muted);
+      margin-top: 4px;
     }
 
-    .skill-card p,
-    .note-card p,
-    .interest-card p {
-      margin-bottom: 0;
-      font-size: 15px;
-      line-height: 1.72;
-    }
-
-    .showcase {
+    /* ============================================================
+       PROJECTS — 作品卡片
+       ============================================================ */
+    .project-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 330px;
-      gap: 18px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
     }
-
-    .video-panel {
-      position: relative;
-      min-height: 340px;
-      display: grid;
-      align-items: end;
-      padding: 28px;
+    .project-card {
       border: 3px solid var(--line);
-      color: #fff9ea;
-      background:
-        linear-gradient(var(--sky) 0 38%, #4d75a4 38% 52%, #2f1c13 52% 100%);
-      box-shadow: var(--pixel-shadow);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow-soft);
       overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: flex;
+      flex-direction: column;
     }
-
-    .video-panel::before {
-      content: "";
-      position: absolute;
-      left: 34px;
-      top: 34px;
-      width: 36px;
-      height: 36px;
-      background: var(--accent-2);
-      border: 3px solid var(--line);
-      box-shadow: 62px 32px 0 -8px var(--paper), 96px 36px 0 -10px var(--paper), 220px 24px 0 -6px var(--paper);
-    }
-
-    .play {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 82px;
-      height: 82px;
-      transform: translate(-50%, -50%);
-      border: 3px solid var(--line);
-      background: var(--accent);
+    .project-card:hover {
+      transform: translate(-2px, -2px);
       box-shadow: 6px 6px 0 var(--line);
     }
-
-    .play::after {
-      content: "";
-      position: absolute;
-      left: 31px;
-      top: 24px;
-      width: 0;
-      height: 0;
-      border-top: 16px solid transparent;
-      border-bottom: 16px solid transparent;
-      border-left: 24px solid #fff9ea;
+    .project-card.featured {
+      grid-column: span 2;
     }
 
-    .video-panel h3,
-    .video-panel p {
+    .project-cover {
+      height: 200px;
+      border-bottom: 3px solid var(--line);
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
       position: relative;
-      z-index: 1;
-      max-width: 540px;
-      color: #fff9ea;
-      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.42);
+      overflow: hidden;
     }
+    .project-card:nth-child(2) .project-cover { background: linear-gradient(135deg, var(--accent-3), var(--sky)); }
+    .project-card:nth-child(3) .project-cover { background: linear-gradient(135deg, var(--accent-4), var(--accent)); }
+    .project-card:nth-child(4) .project-cover { background: linear-gradient(135deg, var(--sky), var(--accent-3)); }
 
-    .video-panel h3 {
-      font-size: 30px;
+    .project-cover img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      image-rendering: auto;
     }
-
-    .video-panel p {
-      margin-bottom: 0;
-    }
-
-    .side-notes {
-      display: grid;
-      gap: 12px;
-    }
-
-    .note-card {
-      padding: 18px;
-    }
-
-    .note-card h3 {
-      margin-bottom: 6px;
-      font-size: 20px;
-    }
-
-    .interest-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .interest-card {
-      padding: 20px;
-    }
-
-    .interest-icon {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 14px;
-      border: 3px solid var(--line);
-      background: var(--accent);
-      color: #fff9ea;
-      box-shadow: 4px 4px 0 var(--line);
-      font-weight: 900;
-    }
-
-    .interest-card h3 {
-      margin-bottom: 8px;
-      font-size: 21px;
-    }
-
-    .footnote {
-      margin: 28px 0 0;
-      padding: 16px;
-      border: 3px solid var(--line);
-      background: var(--paper-2);
-      box-shadow: var(--pixel-shadow-soft);
-      color: var(--text);
+    .project-cover-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 14px;
       font-weight: 900;
+      color: rgba(255, 249, 234, 0.85);
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    }
+    .project-cover::after {
+      content: "";
+      position: absolute;
+      right: 20px; bottom: 20px;
+      width: 24px; height: 24px;
+      background: rgba(255, 249, 234, 0.4);
+      border: 3px solid rgba(60, 36, 24, 0.3);
+      box-shadow: 14px -14px 0 rgba(255, 249, 234, 0.3);
     }
 
+    .project-body {
+      padding: 22px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    .project-body h3 { font-size: 22px; }
+    .project-body p { font-size: 14px; flex: 1; }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .project-tags span {
+      padding: 3px 8px;
+      border: 2px solid var(--line);
+      background: var(--paper-2);
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    /* ============================================================
+       SKILLS — 技能树
+       ============================================================ */
+    .skill-tree {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+    .skill-branch {
+      padding: 24px;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow-soft);
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+    .skill-branch:hover { transform: translateY(-3px); }
+    .skill-branch-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .skill-branch-icon {
+      width: 44px; height: 44px;
+      display: grid;
+      place-items: center;
+      border: 3px solid var(--line);
+      font-size: 20px;
+      box-shadow: 3px 3px 0 var(--line);
+    }
+    .skill-branch:nth-child(1) .skill-branch-icon { background: var(--accent); color: #fff9ea; }
+    .skill-branch:nth-child(2) .skill-branch-icon { background: var(--accent-3); color: #fff9ea; }
+    .skill-branch:nth-child(3) .skill-branch-icon { background: var(--accent-4); color: #fff9ea; }
+    .skill-branch:nth-child(4) .skill-branch-icon { background: var(--sky); color: #2f1c13; }
+
+    .skill-branch h3 { margin-bottom: 0; font-size: 20px; }
+    .skill-branch p { font-size: 14px; margin-bottom: 0; }
+    .skill-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .skill-items span {
+      padding: 4px 10px;
+      border: 2px solid var(--line);
+      background: var(--paper-2);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    /* ============================================================
+       GALLERY — 画廊
+       ============================================================ */
+    .gallery-note {
+      padding: 14px 18px;
+      border: 2px dashed var(--line);
+      background: var(--paper-2);
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--muted);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .gallery-item {
+      aspect-ratio: 1;
+      border: 3px solid var(--line);
+      background: var(--paper-2);
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      box-shadow: var(--pixel-shadow-soft);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .gallery-item:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--line);
+    }
+    .gallery-item img,
+    .gallery-item video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      image-rendering: auto;
+      display: block;
+    }
+    .gallery-placeholder {
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      text-align: center;
+      padding: 12px;
+      gap: 8px;
+    }
+    .gallery-placeholder-icon {
+      font-size: 32px;
+      opacity: 0.5;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 40px;
+    }
+    .lightbox.active { display: flex; }
+    .lightbox img, .lightbox video {
+      max-width: 90vw;
+      max-height: 85vh;
+      border: 4px solid var(--line);
+      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
+      image-rendering: auto;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      width: 48px; height: 48px;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: #fff9ea;
+      border: 3px solid #fff9ea;
+      font-size: 24px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.5);
+    }
+
+    /* ============================================================
+       CONTACT
+       ============================================================ */
+    .contact-card {
+      padding: clamp(32px, 5vw, 56px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: "";
+      position: absolute;
+      top: -40px; left: 50%;
+      transform: translateX(-50%);
+      width: 200px; height: 200px;
+      background: radial-gradient(circle, var(--accent-2) 0%, transparent 70%);
+      opacity: 0.3;
+    }
+    .contact-card h2 { margin-bottom: 16px; position: relative; }
+    .contact-card p {
+      max-width: 560px;
+      margin: 0 auto 28px;
+      position: relative;
+      font-size: 18px;
+    }
+    .contact-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* ============================================================
+       FOOTER
+       ============================================================ */
     footer {
       display: flex;
       justify-content: space-between;
@@ -806,62 +964,307 @@
       font-size: 14px;
       font-weight: 900;
     }
+    [data-theme="dark"] footer {
+      border-top-color: rgba(246, 212, 166, 0.3);
+    }
+
+    /* ============================================================
+       GAME — 像素栽树小游戏
+       ============================================================ */
+    .game-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 72px;
+      background: linear-gradient(180deg, transparent 0%, var(--bg-2) 20%, var(--paper-3) 100%);
+      border-top: 3px solid var(--line);
+      z-index: 30;
+      pointer-events: none;
+    }
+    .game-ground {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 24px;
+      background: var(--accent-3);
+      border-top: 3px solid var(--line);
+    }
+    [data-theme="dark"] .game-ground {
+      background: #5a8a4d;
+    }
+    .game-ground::before {
+      content: "";
+      position: absolute;
+      top: -2px; left: 0; right: 0;
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--accent-3) 0 12px,
+        rgba(60, 36, 24, 0.15) 12px 14px
+      );
+    }
+
+    .game-character {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      width: 24px;
+      height: 24px;
+      transform: translateX(-50%);
+      pointer-events: none;
+      z-index: 31;
+      transition: left 0.08s linear;
+    }
+    .pixel-farmer {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: #f1b388;
+      border: 3px solid var(--line);
+      box-shadow:
+        /* hat */
+        0 -9px 0 -3px var(--accent-3),
+        -6px -9px 0 -3px var(--accent-3),
+        6px -9px 0 -3px var(--accent-3),
+        /* body */
+        0 9px 0 3px var(--accent-3),
+        /* arms */
+        -12px 9px 0 0 var(--line),
+        12px 9px 0 0 var(--line),
+        /* legs */
+        -6px 27px 0 0 var(--accent-4),
+        6px 27px 0 0 var(--accent-4),
+        /* shoes */
+        -6px 36px 0 0 var(--line),
+        6px 36px 0 0 var(--line);
+      animation: farmer-bob 0.6s ease-in-out infinite;
+    }
+    @keyframes farmer-bob {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+    .pixel-farmer.walking {
+      animation: farmer-walk 0.3s ease-in-out infinite;
+    }
+    @keyframes farmer-walk {
+      0%, 100% { transform: translateY(0) scaleX(1); }
+      25% { transform: translateY(-3px) scaleX(0.95); }
+      50% { transform: translateY(0) scaleX(1); }
+      75% { transform: translateY(-2px) scaleX(1.05); }
+    }
+
+    .tree {
+      position: absolute;
+      bottom: 24px;
+      pointer-events: none;
+      z-index: 29;
+      transform-origin: bottom center;
+      animation: tree-grow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes tree-grow {
+      0% { transform: scaleY(0) scaleX(0.5); opacity: 0; }
+      100% { transform: scaleY(1) scaleX(1); opacity: 1; }
+    }
+    .tree-trunk {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      background: #8a5a36;
+      border: 2px solid var(--line);
+    }
+    .tree-leaves {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      border: 3px solid var(--line);
+    }
+
+    .game-hud {
+      position: fixed;
+      bottom: 82px;
+      left: 20px;
+      z-index: 32;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow-soft);
+      font-size: 12px;
+      font-weight: 900;
+      pointer-events: auto;
+    }
+    .game-hud-trees {
+      display: flex;
+      gap: 4px;
+    }
+    .tree-dot {
+      width: 14px; height: 14px;
+      border: 2px solid var(--line);
+      background: var(--paper-2);
+    }
+    .tree-dot.grown { background: var(--accent-3); }
+    .game-hint {
+      position: fixed;
+      bottom: 82px;
+      right: 20px;
+      z-index: 32;
+      padding: 8px 12px;
+      border: 3px solid var(--line);
+      background: var(--accent-2);
+      color: #2f1c13;
+      box-shadow: var(--pixel-shadow-soft);
+      font-size: 12px;
+      font-weight: 900;
+      pointer-events: auto;
+      animation: hint-bounce 2s ease-in-out infinite;
+    }
+    @keyframes hint-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    /* Touch controls for mobile */
+    .game-controls {
+      position: fixed;
+      bottom: 82px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      gap: 8px;
+      z-index: 32;
+      pointer-events: auto;
+    }
+    .game-btn {
+      width: 44px; height: 44px;
+      display: grid;
+      place-items: center;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: 3px 3px 0 var(--line);
+      font-weight: 900;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    .game-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--line);
+    }
+    .game-btn.plant {
+      width: auto;
+      padding: 0 14px;
+      background: var(--accent-3);
+      color: #fff9ea;
+    }
+
+    /* Celebration overlay */
+    .celebration {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 99;
+      display: none;
+    }
+    .celebration.active { display: block; }
+    .confetti {
+      position: absolute;
+      width: 10px; height: 10px;
+      border: 2px solid var(--line);
+      animation: confetti-fall 3s ease-out forwards;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+    .celebration-msg {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 24px 36px;
+      border: 4px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow-lg);
+      text-align: center;
+      animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes pop-in {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    }
+    .celebration-msg h3 {
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+    .celebration-msg p {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    /* ============================================================
+       SCROLL ANIMATIONS
+       ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 1000px) {
+      .hero { grid-template-columns: 1fr; }
+      .profile-card { max-width: 420px; margin: 0 auto; width: 100%; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
 
     @media (max-width: 900px) {
-      .topbar {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .hero,
-      .section,
-      .showcase {
-        grid-template-columns: 1fr;
-      }
-
-      .section-label {
-        position: static;
-      }
-
-      .skill-grid,
-      .interest-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .section { grid-template-columns: 1fr; gap: 24px; padding: 48px 0; }
+      .section-label { position: static; }
+      .trait-grid { grid-template-columns: 1fr; }
+      .skill-tree { grid-template-columns: 1fr; }
+      .project-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-column: span 1; }
+      .gallery-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 620px) {
-      body {
-        font-size: 15px;
-      }
-
-      .shell {
-        width: min(100% - 24px, var(--content));
-      }
-
-      .hero {
-        padding: 42px 0 36px;
-      }
-
-      h1 {
-        font-size: clamp(38px, 12vw, 58px);
-      }
-
-      .article-card {
-        grid-template-columns: 1fr;
-      }
-
-      .skill-grid,
-      .interest-grid {
-        grid-template-columns: 1fr;
-      }
-
-      footer {
-        flex-direction: column;
-      }
+      body { font-size: 15px; padding-bottom: 100px; }
+      .shell { width: min(100% - 24px, var(--content)); }
+      .hero { padding: 42px 0 36px; }
+      h1 { font-size: clamp(32px, 10vw, 48px); }
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .stat-card { padding: 14px 10px; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; }
+      .game-hint { display: none; }
+      .game-controls { display: flex; }
+      .game-hud { font-size: 11px; padding: 6px 10px; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ============================================================
+       TOP NAV
+       ============================================================ -->
   <nav class="shell topbar pixel-box">
     <a class="brand" href="#top" aria-label="返回顶部">
       <span class="brand-mark"></span>
@@ -869,43 +1272,88 @@
     </a>
     <div class="nav" aria-label="页面导航">
       <a href="#about">关于</a>
-      <a href="#education">教育</a>
       <a href="#work">经历</a>
-      <a href="#projects">项目</a>
-      <a href="#skills">能力</a>
-      <a href="#extras">附加</a>
+      <a href="#projects">作品</a>
+      <a href="#skills">技能</a>
+      <a href="#gallery">画廊</a>
+      <a href="#contact">联系</a>
       <button class="theme-toggle" type="button" aria-label="切换明暗模式">DAY/NIGHT</button>
     </div>
   </nav>
 
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
   <header class="shell hero" id="top">
-    <div>
-      <div class="hero-kicker"><span class="status-dot"></span>2027 CAMPUS CANDIDATE · AI / FINANCE / OPERATIONS</div>
-      <h1>你好，我是池一鸣。我擅长把金融认知、技术工具与业务运营结合起来，做出真正能落地的<span class="highlight">AI 应用闭环</span>。</h1>
-      <p class="hero-copy">西南财经大学金融专硕（2027 届），武汉理工大学金融科技本科。曾在长江证券自营交易室参与交易系统测试优化与智能体部署，在好未来 ToB 业务部做产品运营，现于飞书商业化团队担任 CSM 实习生，深度服务教育与律所行业，持续把 AI 工具、流程设计与用户运营结合为可复制的业务成果。</p>
+    <div class="reveal">
+      <div class="hero-kicker"><span class="status-dot"></span>2027 CAMPUS · AI × FINANCE × OPERATIONS</div>
+      <h1>用<span class="highlight">金融思维</span>理解业务，<br/>用<span class="highlight">AI 工具</span>放大结果。</h1>
+      <p class="hero-copy">
+        我是池一鸣，西南财经大学金融专硕（2027 届）。从证券自营交易室到飞书商业化团队，
+        我一直在做同一件事——把复杂的业务场景拆解成可落地的流程，再用 AI 工具和运营方法让它规模化。
+      </p>
       <div class="hero-actions">
-        <a class="button primary" href="mailto:18064009641@163.com">EMAIL ME</a>
-        <a class="button secondary" href="https://github.com/Algernon8/resume">GITHUB REPO</a>
+        <a class="button primary" href="#contact">📮 联系我</a>
+        <a class="button secondary" href="#projects">🎯 看作品</a>
+        <a class="button ghost" href="https://github.com/Algernon8/resume">GitHub ↗</a>
       </div>
       <div class="tag-row" aria-label="个人标签">
         <span class="tag">金融 × 计算机</span>
-        <span class="tag">飞书商业化</span>
-        <span class="tag">客户成功 / 运营</span>
-        <span class="tag">飞书 AI / 智能体</span>
-        <span class="tag">教育 / 律所</span>
-        <span class="tag">赛事与社群运营</span>
+        <span class="tag">飞书商业化 CSM</span>
+        <span class="tag">AI 应用落地</span>
+        <span class="tag">赛事 / 社群运营</span>
+        <span class="tag">教育 & 律所行业</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row">
+        <div class="stat-card reveal reveal-delay-1">
+          <div class="stat-num" data-count="6900">0</div>
+          <div class="stat-label">有效报名人数</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-2">
+          <div class="stat-num" data-count="108">0</div>
+          <div class="stat-label">合作企业</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-3">
+          <div class="stat-num" data-count="7000">0</div>
+          <div class="stat-label">社群成员</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-1">
+          <div class="stat-num" data-count="4300">0</div>
+          <div class="stat-label">赛事队伍</div>
+        </div>
       </div>
     </div>
 
-    <aside class="profile-card pixel-box">
-      <div class="pixel-avatar-scene" aria-label="像素风个人场景">
+    <!-- Profile Card -->
+    <aside class="profile-card pixel-box reveal reveal-delay-2">
+      <div class="avatar-scene" aria-label="像素风个人场景">
         <span class="sun"></span>
         <span class="cloud"></span>
         <span class="pixel-person"></span>
-        <img class="avatar-photo" src="https://s3-imfile.feishucdn.com/static-resource/v1/v3_0012i_b27158f8-f076-43f9-9a94-c678ec70da6g~?image_size=240x240&cut_type=&quality=&format=image&sticker_format=.webp" alt="池一鸣头像" />
+        <!-- 真实头像：替换 ./images/avatar.jpg 即可 -->
+        <img class="avatar-main"
+             src="https://s3-imfile.feishucdn.com/static-resource/v1/v3_0012i_b27158f8-f076-43f9-9a94-c678ec70da6g~?image_size=240x240&cut_type=&quality=&format=image&sticker_format=.webp"
+             alt="池一鸣头像"
+             onerror="this.style.display='none'" />
       </div>
+
+      <!-- 生活照轮播：替换 ./images/photo-X.jpg 即可 -->
+      <div class="photo-strip">
+        <div class="photo-thumb">
+          <img src="./images/photo-1.jpg" alt="生活照1" onerror="this.parentElement.innerHTML='<div class=\'photo-thumb-placeholder\'>📷<br/>photo-1.jpg</div>'" />
+        </div>
+        <div class="photo-thumb">
+          <img src="./images/photo-2.jpg" alt="生活照2" onerror="this.parentElement.innerHTML='<div class=\'photo-thumb-placeholder\'>📷<br/>photo-2.jpg</div>'" />
+        </div>
+        <div class="photo-thumb">
+          <img src="./images/photo-3.jpg" alt="生活照3" onerror="this.parentElement.innerHTML='<div class=\'photo-thumb-placeholder\'>📷<br/>photo-3.jpg</div>'" />
+        </div>
+      </div>
+
       <div class="hero-name">池一鸣</div>
-      <p class="profile-role">西南财经大学金融专硕（2027 届）· 飞书商业化团队 CSM 实习生</p>
+      <p class="profile-role">飞书商业化 · CSM 实习生</p>
       <div class="info-list">
         <div class="info-item">
           <span class="label">Phone</span>
@@ -917,75 +1365,107 @@
         </div>
         <div class="info-item">
           <span class="label">Education</span>
-          <span class="value">西南财经大学金融专硕 / 武汉理工大学金融科技</span>
+          <span class="value">西南财大 · 金融专硕</span>
         </div>
         <div class="info-item">
-          <span class="label">Profile</span>
-          <span class="value">中共党员 · 金融与计算机复合背景</span>
+          <span class="label">Tag</span>
+          <span class="value">中共党员 · 复合背景</span>
         </div>
       </div>
     </aside>
   </header>
 
   <main class="shell">
+
+    <!-- ============================================================
+         ABOUT — 个人画像 + 三个关键词
+         ============================================================ -->
     <section class="section" id="about">
-      <div class="section-label">
+      <div class="section-label reveal">
         <div class="kicker">ABOUT</div>
-        <h2>个人画像</h2>
-        <p class="section-desc">把教育背景、业务理解、AI 工具能力与可量化结果放在同一张图里。</p>
+        <h2>我是谁</h2>
+        <p class="section-desc">不是单一标签，而是三种能力的交叉点。</p>
       </div>
-      <div class="intro-card">
-        <p class="lead">我不是只做活动、只做运营或只会用工具的人，而是更擅长在真实业务场景里，把目标、流程、系统与用户触达串成一个完整闭环。</p>
-        <p>从证券自营交易室的交易系统测试与智能体部署，到好未来 ToB 业务中的产品运营，再到飞书商业化团队面向教育与律所客户的客户成功工作，我持续在做同一件事：理解场景、拆解流程、推动执行、复盘结果，并把经验沉淀成可复制的方法。我希望把复杂业务问题转化成真正能落地的协作机制，让 AI 从“可展示”走向“可使用、可放大、可复用”。</p>
+      <div class="about-grid">
+        <div class="about-lead pixel-box reveal">
+          <p class="lead">
+            我擅长在真实业务场景里，把<span class="highlight">目标、流程、系统与用户触达</span>串成一个完整闭环。
+          </p>
+          <p>
+            从证券自营交易室的智能体部署，到好未来 ToB 的产品运营，再到飞书商业化面向教育与律所客户的客户成功工作，
+            我一直在做同一件事：理解场景、拆解流程、推动执行、复盘结果，并把经验沉淀成可复制的方法。
+            我希望让 AI 从"可展示"走向"可使用、可放大、可复用"。
+          </p>
+        </div>
+
+        <div class="trait-grid">
+          <div class="trait-card reveal reveal-delay-1">
+            <div class="trait-icon">🧠</div>
+            <h3>金融思维</h3>
+            <p>用数据分析和风险意识做决策，习惯先算清楚投入产出，再动手做事。</p>
+          </div>
+          <div class="trait-card reveal reveal-delay-2">
+            <div class="trait-icon">🛠️</div>
+            <h3>技术工具</h3>
+            <p>从飞书 AI、多维表格到 Python、SQL，能用工具解决的问题绝不手动重复。</p>
+          </div>
+          <div class="trait-card reveal reveal-delay-3">
+            <div class="trait-icon">🤝</div>
+            <h3>运营落地</h3>
+            <p>理解用户、推动协同、交付结果——从策划到复盘，一竿子插到底的 Owner 意识。</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section" id="education">
-      <div class="section-label">
-        <div class="kicker">EDU</div>
-        <h2>教育背景</h2>
-        <p class="section-desc">金融专业训练、数据分析能力与技术工具意识，构成我做 AI 场景落地的底层优势。</p>
-      </div>
-      <div class="entry-list">
-        <article class="entry-card">
-          <div class="entry-meta"><span>2025.09 - 2027.06</span><span>西南财经大学</span><span>金融专硕</span></div>
-          <h3>金融专硕 · 2027 届</h3>
-          <p>以金融分析、研究与表达训练为主线，同时在校内承担党支部宣传工作，持续关注金融业务与 AI 工具的结合机会。</p>
-          <ul>
-            <li>中共党员，担任金融第十党支部宣传委员。</li>
-            <li>获得校一等奖学金、优秀研究生等荣誉。</li>
-            <li>持续补足产品、数据分析与自动化能力，强化复合型竞争力。</li>
-          </ul>
-        </article>
-        <article class="entry-card">
-          <div class="entry-meta"><span>2021.09 - 2025.06</span><span>武汉理工大学</span><span>金融科技</span></div>
-          <h3>金融科技本科 · 复合型训练</h3>
-          <p>在金融、数据分析、编程与统计交叉训练中建立复合背景，为进入 AI 应用、产品运营与数字化协同场景打下基础。</p>
-          <ul>
-            <li>金融科技试点班，本科阶段系统接触金融、编程、数据库与统计分析。</li>
-            <li>担任武汉理工大学团委志愿者工作部项目建设中心副主任，参与大型志愿服务活动组织规划。</li>
-            <li>获得校级奖学金、优秀本科毕业生等奖励，兼具学习能力与组织协同经验。</li>
-          </ul>
-        </article>
-      </div>
-    </section>
-
+    <!-- ============================================================
+         WORK — 精选经历
+         ============================================================ -->
     <section class="section" id="work">
-      <div class="section-label">
-        <div class="kicker">EXP</div>
-        <h2>实习经历</h2>
-        <p class="section-desc">从交易系统、产品运营到客户成功，我的经历始终围绕“理解场景—推动落地—验证结果”。</p>
+      <div class="section-label reveal">
+        <div class="kicker">EXPERIENCE</div>
+        <h2>做过什么</h2>
+        <p class="section-desc">从交易系统到客户成功，每一段都在往"AI + 业务落地"走。</p>
       </div>
       <div class="entry-list">
-        <article class="entry-card">
-          <div class="entry-meta"><span>当前实习</span><span>飞书商业化团队</span><span>CSM</span></div>
-          <h3>教育与律所行业客户成功 / AI 场景运营</h3>
-          <p>在飞书商业化团队服务教育与律所客户，覆盖赛事项目、社群运营、流程系统搭建、培训赋能与现场支持。</p>
+
+        <!-- 飞书 — FEATURED -->
+        <article class="entry-card featured reveal">
+          <div class="entry-meta">
+            <span>当前实习</span>
+            <span>飞书商业化团队</span>
+            <span>CSM 实习生</span>
+          </div>
+          <h3>教育 & 律所行业客户成功 · AI 场景运营</h3>
+          <p>
+            在飞书商业化团队深度服务教育与律所客户，覆盖赛事运营、社群搭建、流程系统、培训赋能与现场支持。
+            是我当前最核心的业务实践。
+          </p>
+
+          <div class="entry-stats">
+            <div class="entry-stat">
+              <div class="entry-stat-num">6900+</div>
+              <div class="entry-stat-label">有效报名人数</div>
+            </div>
+            <div class="entry-stat">
+              <div class="entry-stat-num">108家</div>
+              <div class="entry-stat-label">企业入池</div>
+            </div>
+            <div class="entry-stat">
+              <div class="entry-stat-num">4300+</div>
+              <div class="entry-stat-label">队伍审核</div>
+            </div>
+            <div class="entry-stat">
+              <div class="entry-stat-num">2800+</div>
+              <div class="entry-stat-label">机器人活跃</div>
+            </div>
+          </div>
+
           <ul>
-            <li>作为核心 Owner 全程负责 2026 AI 先锋未来人才大赛（AFFT）策划宣发、直播运营、4300+ 队伍审核与选手侧运营，推动 108 家企业入池、有效报名人数 6900+。</li>
-            <li>负责 7000+ 人外部话题群与选手群运营，并开发赛事机器人，截至目前累计活跃人数 2800+，显著提升选手服务效率与触达覆盖。</li>
-            <li>基于多维表格应用模式完善搭建智慧假勤系统，并输出学校智慧假勤系统部署指引，推动方案从单点试用走向可复制落地。</li>
-            <li>主导安理律所飞书 AI 通用功能全员培训，并现场支持中国教育国际交流协会换届大会投票系统全流程，具备培训交付与关键现场保障能力。</li>
+            <li>作为核心 Owner 全程负责 2026 AI 先锋未来人才大赛（AFFT），从策划宣发、直播运营到 4300+ 队伍审核与选手侧运营，推动 108 家企业入池、有效报名 6900+ 人。</li>
+            <li>负责 7000+ 人外部话题群与选手群运营，开发赛事机器人承接服务，累计活跃人数 2800+，显著提升选手服务效率与触达覆盖。</li>
+            <li>基于多维表格应用模式搭建智慧假勤系统，输出学校场景部署指引，推动方案从单点试用走向可复制落地。</li>
+            <li>主导安理律所飞书 AI 通用功能全员培训，现场支持中国教育国际交流协会换届大会投票系统全流程。</li>
           </ul>
           <div class="pill-list">
             <span class="pill">AFFT 赛事运营</span>
@@ -993,150 +1473,695 @@
             <span class="pill">律所客户</span>
             <span class="pill">飞书 AI</span>
             <span class="pill">多维表格</span>
+            <span class="pill">社群运营</span>
           </div>
         </article>
 
-        <article class="entry-card">
-          <div class="entry-meta"><span>2025.04 - 2025.07</span><span>长江证券自营交易室</span><span>交易系统 / 智能体</span></div>
+        <!-- 长江证券 -->
+        <article class="entry-card reveal reveal-delay-1">
+          <div class="entry-meta">
+            <span>2025.04 - 2025.07</span>
+            <span>长江证券自营交易室</span>
+            <span>交易系统 / 智能体</span>
+          </div>
           <h3>交易系统测试优化与智能体部署</h3>
           <p>在自营交易场景中参与智能体部署、交易系统测试与日志分析，连接业务需求与系统稳定性优化。</p>
           <ul>
-            <li>基于 Hiagent 平台参与“长江灵瞳”智能体部署测试，辅助搭建财经知识与盘前问答场景的智能体流程。</li>
-            <li>围绕每日盘前信息问答等使用场景优化提示逻辑与知识注入，提升回答准确度和交互体验。</li>
-            <li>支持场内外权益类资产日常交易指令相关准备与计算管理，协同保障交易流程合规有序。</li>
-            <li>使用 Python、SQL 分析交易日志，定位交易指令失败率较高等问题并推动修复，提高系统稳定性。</li>
+            <li>基于 Hiagent 平台参与"长江灵瞳"智能体部署测试，辅助搭建财经知识与盘前问答场景的智能体流程。</li>
+            <li>围绕盘前信息问答优化提示逻辑与知识注入，提升回答准确度和交互体验。</li>
+            <li>支持场内外权益类资产日常交易指令准备与计算管理，协同保障交易流程合规有序。</li>
+            <li>使用 Python、SQL 分析交易日志，定位指令失败率问题并推动修复，提高系统稳定性。</li>
           </ul>
+          <div class="pill-list">
+            <span class="pill">AI 智能体</span>
+            <span class="pill">Python / SQL</span>
+            <span class="pill">交易系统</span>
+            <span class="pill">日志分析</span>
+          </div>
         </article>
 
-        <article class="entry-card">
-          <div class="entry-meta"><span>2025.02 - 2025.04</span><span>好未来 ToB 业务部</span><span>产品运营</span></div>
-          <h3>ToB 产品运营与跨部门协同</h3>
+        <!-- 好未来 -->
+        <article class="entry-card reveal reveal-delay-2">
+          <div class="entry-meta">
+            <span>2025.02 - 2025.04</span>
+            <span>好未来 ToB 业务部</span>
+            <span>产品运营</span>
+          </div>
+          <h3>ToB 教育产品运营与跨部门协同</h3>
           <p>参与 ToB 教育产品运营、内容生产与数据分析，围绕产品可用性与用户体验推动优化。</p>
           <ul>
-            <li>深度参与数学板块产品“超级课件”制作，独立完成 60+ 教学单元课件制作、脱敏、审核与上架流程。</li>
-            <li>通过用户调研与数据分析识别学生互动性不足、场景贴合度不够等关键问题，并提出优化建议支撑产品迭代。</li>
-            <li>与研发、设计、市场等团队协同推进功能优化与市场动作，帮助产品信息向内部与外部高效传递。</li>
+            <li>深度参与数学板块"超级课件"制作，独立完成 60+ 教学单元课件制作、脱敏、审核与上架。</li>
+            <li>通过用户调研与数据分析识别互动性不足、场景贴合度不够等关键问题，提出优化建议支撑产品迭代。</li>
+            <li>与研发、设计、市场等团队协同推进功能优化与市场动作，高效传递产品信息。</li>
           </ul>
+          <div class="pill-list">
+            <span class="pill">产品运营</span>
+            <span class="pill">用户调研</span>
+            <span class="pill">跨部门协同</span>
+          </div>
         </article>
+
       </div>
     </section>
 
+    <!-- ============================================================
+         PROJECTS — 作品卡片
+         ============================================================ -->
     <section class="section" id="projects">
-      <div class="section-label">
-        <div class="kicker">PROJECTS</div>
-        <h2>项目与竞赛</h2>
-        <p class="section-desc">优先呈现最能代表我方法论、结果感与跨界能力的项目经历。</p>
+      <div class="section-label reveal">
+        <div class="kicker">WORKS</div>
+        <h2>代表作品</h2>
+        <p class="section-desc">从 0 到 1 落地的项目，最能代表我的方法论。</p>
       </div>
-      <div class="article-grid">
-        <article class="article-card">
-          <div class="article-index">01</div>
-          <div>
+      <div class="project-grid">
+
+        <!-- AFFT — FEATURED -->
+        <article class="project-card featured reveal">
+          <div class="project-cover">
+            <img src="./images/project-afft.jpg" alt="AFFT大赛" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
+            <div class="project-cover-placeholder" style="display:none;">🏆 2026 AI 先锋未来人才大赛</div>
+          </div>
+          <div class="project-body">
             <h3>2026 AI 先锋未来人才大赛（AFFT）</h3>
-            <p>从 0 到 1 搭建赛事运营机制，把宣发、直播、审核、社群与机器人服务串成闭环，是我当前最具代表性的业务落地项目。</p>
-            <div class="small-meta"><span>4300+ 队伍审核</span><span>6900+ 有效报名</span><span>108 家企业入池</span><span>7000+ 社群运营</span></div>
+            <p>
+              从 0 到 1 搭建赛事运营闭环——宣发、直播、审核、社群、机器人服务全链路。
+              作为核心 Owner 推动 6900+ 有效报名、108 家企业入池，是我当前最具代表性的业务落地项目。
+            </p>
+            <div class="project-tags">
+              <span>赛事运营</span>
+              <span>社群 7000+</span>
+              <span>机器人开发</span>
+              <span>企业拓展</span>
+            </div>
           </div>
         </article>
-        <article class="article-card">
-          <div class="article-index">02</div>
-          <div>
-            <h3>腾讯未来产品经理创营 · AI 产品实践</h3>
-            <p>围绕 AI 阅读导览、知识结构化与 AI Coding 工具展开产品构想，尝试把“获取信息—理解信息—输出结果”做成一条更顺滑的产品链路。</p>
-            <div class="small-meta"><span>产品设计</span><span>AI 工作流</span><span>原型构想</span></div>
+
+        <!-- 智慧假勤 -->
+        <article class="project-card reveal reveal-delay-1">
+          <div class="project-cover">
+            <img src="./images/project-absence.jpg" alt="智慧假勤" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
+            <div class="project-cover-placeholder" style="display:none;">📋 智慧假勤系统</div>
           </div>
-        </article>
-        <article class="article-card">
-          <div class="article-index">03</div>
-          <div>
-            <h3>“学创杯”全国大学生创业综合模拟大赛</h3>
-            <p>担任队长，围绕企业经营模拟完成利润、投资、开发与团队协同决策，在高压节奏下兼顾推进、复盘与答辩表达。</p>
-            <div class="small-meta"><span>国家级 A 类</span><span>全国一等奖</span><span>队长</span></div>
-          </div>
-        </article>
-        <article class="article-card">
-          <div class="article-index">04</div>
-          <div>
+          <div class="project-body">
             <h3>智慧假勤系统与部署指引</h3>
-            <p>基于飞书多维表格应用模式，从流程梳理、权限设计到交付文档沉淀，输出可被学校场景复用的数字化解决方案。</p>
-            <div class="small-meta"><span>多维表格</span><span>流程数字化</span><span>可复制部署</span></div>
+            <p>
+              基于飞书多维表格应用模式，从流程梳理、权限设计到交付文档沉淀，
+              输出可被学校场景复用的数字化解决方案。
+            </p>
+            <div class="project-tags">
+              <span>多维表格</span>
+              <span>流程数字化</span>
+              <span>可复制部署</span>
+            </div>
           </div>
         </article>
+
+        <!-- 长江灵瞳 -->
+        <article class="project-card reveal reveal-delay-2">
+          <div class="project-cover">
+            <img src="./images/project-ai.jpg" alt="长江灵瞳" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
+            <div class="project-cover-placeholder" style="display:none;">🤖 长江灵瞳智能体</div>
+          </div>
+          <div class="project-body">
+            <h3>"长江灵瞳"财经智能体</h3>
+            <p>
+              基于 Hiagent 平台参与搭建财经知识与盘前问答智能体，
+              优化提示逻辑与知识注入，提升交易场景下的信息获取效率。
+            </p>
+            <div class="project-tags">
+              <span>AI 智能体</span>
+              <span>财经场景</span>
+              <span>提示工程</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 学创杯 -->
+        <article class="project-card reveal reveal-delay-1">
+          <div class="project-cover">
+            <img src="./images/project-competition.jpg" alt="学创杯" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
+            <div class="project-cover-placeholder" style="display:none;">🏅 学创杯全国一等奖</div>
+          </div>
+          <div class="project-body">
+            <h3>"学创杯"全国大学生创业综合模拟大赛</h3>
+            <p>
+              担任队长，围绕企业经营模拟完成利润、投资、开发与团队协同决策，
+              在高压节奏下兼顾推进、复盘与答辩表达。获全国一等奖。
+            </p>
+            <div class="project-tags">
+              <span>国家级 A 类</span>
+              <span>全国一等奖</span>
+              <span>队长</span>
+            </div>
+          </div>
+        </article>
+
       </div>
     </section>
 
+    <!-- ============================================================
+         SKILLS — 技能树
+         ============================================================ -->
     <section class="section" id="skills">
-      <div class="section-label">
+      <div class="section-label reveal">
         <div class="kicker">SKILLS</div>
-        <h2>核心能力</h2>
-        <p class="section-desc">我最有优势的不是单一工具，而是把工具、业务与执行串成结果。</p>
+        <h2>技能地图</h2>
+        <p class="section-desc">我的优势不是单一工具，而是组合拳。</p>
       </div>
-      <div class="skill-grid">
-        <div class="skill-card"><span class="number">01</span><h3>飞书 AI / 智能体搭建</h3><p>熟练使用 Aily、自定义智能体、多维表格 AI 等能力，能够把 AI 嵌入教育、律所与运营场景。</p></div>
-        <div class="skill-card"><span class="number">02</span><h3>业务流程设计</h3><p>擅长拆解目标、角色与流程，把活动机制、系统规则和协作动作设计成可执行方案。</p></div>
-        <div class="skill-card"><span class="number">03</span><h3>赛事与社群运营</h3><p>覆盖策划宣发、直播运营、审核机制、用户服务与社群维护，具备大规模人群运营经验。</p></div>
-        <div class="skill-card"><span class="number">04</span><h3>数据分析与问题诊断</h3><p>可结合 SQL、Python、STATA 等工具辅助定位问题、分析反馈并提出优化建议。</p></div>
-        <div class="skill-card"><span class="number">05</span><h3>轻量开发与自动化</h3><p>熟悉飞书 People、Codex、Claude Code、matplotlib 等工具，可支持机器人、脚本与轻量功能原型搭建。</p></div>
-        <div class="skill-card"><span class="number">06</span><h3>跨团队推进 / Owner 意识</h3><p>擅长在复杂协同场景中担任核心推进者，从方案、执行到复盘都能持续跟进并沉淀方法。</p></div>
-      </div>
-    </section>
-
-    <section class="section" id="highlights">
-      <div class="section-label">
-        <div class="kicker">HIGHLIGHTS</div>
-        <h2>关键成果</h2>
-        <p class="section-desc">用最短路径呈现我的结果密度与落地能力。</p>
-      </div>
-      <div class="showcase">
-        <div class="video-panel" aria-label="代表成果概览">
-          <div class="play" aria-hidden="true"></div>
-          <div>
-            <h3>我能把一个复杂项目，拆成宣发、审核、社群、机器人、培训与交付的完整链路</h3>
-            <p>无论是赛事运营、系统搭建还是客户培训，我都习惯从目标出发设计机制，再用数据和用户反馈验证结果。</p>
+      <div class="skill-tree">
+        <div class="skill-branch reveal reveal-delay-1">
+          <div class="skill-branch-head">
+            <div class="skill-branch-icon">🤖</div>
+            <h3>AI 工具 & 智能体</h3>
+          </div>
+          <p>把 AI 能力嵌入真实业务场景，从可用变成好用。</p>
+          <div class="skill-items">
+            <span>飞书 Aily</span>
+            <span>自定义智能体</span>
+            <span>多维表格 AI</span>
+            <span>Claude Code</span>
+            <span>提示工程</span>
+            <span>Hiagent</span>
           </div>
         </div>
-        <div class="side-notes">
-          <div class="note-card"><h3>108 家企业入池</h3><p>在 AFFT 项目中完成企业资源拓展与企业侧链接，帮助赛事建立更强的供需匹配能力。</p></div>
-          <div class="note-card"><h3>6900+ 有效报名</h3><p>通过宣发、直播、审核机制与用户运营协同，扩大赛事覆盖同时保证报名质量。</p></div>
-          <div class="note-card"><h3>7000+ 社群运营</h3><p>负责 7000+ 人社群运营，并以赛事机器人承接服务，截至目前累计活跃人数 2800+。</p></div>
+
+        <div class="skill-branch reveal reveal-delay-2">
+          <div class="skill-branch-head">
+            <div class="skill-branch-icon">📊</div>
+            <h3>业务运营 & 项目管理</h3>
+          </div>
+          <p>从目标拆解到结果复盘，全链路推进能力。</p>
+          <div class="skill-items">
+            <span>赛事运营</span>
+            <span>社群运营</span>
+            <span>流程设计</span>
+            <span>活动策划</span>
+            <span>用户增长</span>
+            <span>跨团队协同</span>
+          </div>
+        </div>
+
+        <div class="skill-branch reveal reveal-delay-1">
+          <div class="skill-branch-head">
+            <div class="skill-branch-icon">💻</div>
+            <h3>数据 & 技术</h3>
+          </div>
+          <p>用数据驱动决策，用工具放大效率。</p>
+          <div class="skill-items">
+            <span>Python</span>
+            <span>SQL</span>
+            <span>STATA</span>
+            <span>matplotlib</span>
+            <span>数据分析</span>
+            <span>自动化脚本</span>
+          </div>
+        </div>
+
+        <div class="skill-branch reveal reveal-delay-2">
+          <div class="skill-branch-head">
+            <div class="skill-branch-icon">🎯</div>
+            <h3>行业 & 软技能</h3>
+          </div>
+          <p>金融专业背景 + 客户成功视角，懂业务也懂人。</p>
+          <div class="skill-items">
+            <span>教育行业</span>
+            <span>律所行业</span>
+            <span>金融分析</span>
+            <span>培训交付</span>
+            <span>现场支持</span>
+            <span>公众表达</span>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="extras">
-      <div class="section-label">
-        <div class="kicker">EXTRAS</div>
-        <h2>附加信息</h2>
-        <p class="section-desc">把正式简历里常见但网页中容易遗漏的信息补得更完整。</p>
+    <!-- ============================================================
+         GALLERY — 画廊
+         ============================================================ -->
+    <section class="section" id="gallery">
+      <div class="section-label reveal">
+        <div class="kicker">GALLERY</div>
+        <h2>照片画廊</h2>
+        <p class="section-desc">记录工作与生活中的片段。</p>
       </div>
       <div>
-        <div class="interest-grid">
-          <div class="interest-card"><div class="interest-icon">党</div><h3>组织身份</h3><p>中共党员，担任金融第十党支部宣传委员，具备责任意识、组织观念与稳定执行力。</p></div>
-          <div class="interest-card"><div class="interest-icon">语</div><h3>语言与工具</h3><p>CET-6，熟悉 Python、SQL、STATA、matplotlib，可支持基础分析、可视化与自动化任务。</p></div>
-          <div class="interest-card"><div class="interest-icon">赛</div><h3>竞赛与研究</h3><p>参与国家级 A 类竞赛、省级大创项目与全球服务实践调研，具备研究、复盘与表达能力。</p></div>
-          <div class="interest-card"><div class="interest-icon">动</div><h3>个人特质</h3><p>擅长沟通协同、现场应变与长期跟进；热爱跑步、健身、羽毛球和唱歌，保持稳定状态。</p></div>
+        <div class="gallery-note reveal">
+          💡 上传照片到仓库 <code>gallery/</code> 目录（命名为 1.jpg, 2.jpg...）即可自动显示。
+          支持 .jpg / .png / .mp4 格式。
         </div>
-        <p class="footnote">如果你希望这个页面进一步偏向投递版，我还可以继续拆成“互联网 / AI 运营版”“客户成功版”“金融科技版”三套文案。</p>
+        <div class="gallery-grid">
+          <!-- 1-6: 图片 -->
+          <div class="gallery-item reveal" onclick="openLightbox(this)">
+            <img src="./gallery/1.jpg" alt="画廊1" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/1.jpg</div></div>'" />
+          </div>
+          <div class="gallery-item reveal reveal-delay-1" onclick="openLightbox(this)">
+            <img src="./gallery/2.jpg" alt="画廊2" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/2.jpg</div></div>'" />
+          </div>
+          <div class="gallery-item reveal reveal-delay-2" onclick="openLightbox(this)">
+            <img src="./gallery/3.jpg" alt="画廊3" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/3.jpg</div></div>'" />
+          </div>
+          <div class="gallery-item reveal" onclick="openLightbox(this)">
+            <img src="./gallery/4.jpg" alt="画廊4" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/4.jpg</div></div>'" />
+          </div>
+          <div class="gallery-item reveal reveal-delay-1" onclick="openLightbox(this)">
+            <img src="./gallery/5.jpg" alt="画廊5" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/5.jpg</div></div>'" />
+          </div>
+          <div class="gallery-item reveal reveal-delay-2" onclick="openLightbox(this)">
+            <img src="./gallery/6.jpg" alt="画廊6" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/6.jpg</div></div>'" />
+          </div>
+          <!-- 7-9: 更多 -->
+          <div class="gallery-item reveal" onclick="openLightbox(this)">
+            <img src="./gallery/7.jpg" alt="画廊7" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/7.jpg</div></div>'" />
+          </div>
+          <div class="gallery-item reveal reveal-delay-1" onclick="openLightbox(this)">
+            <img src="./gallery/8.jpg" alt="画廊8" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/8.jpg</div></div>'" />
+          </div>
+          <div class="gallery-item reveal reveal-delay-2" onclick="openLightbox(this)">
+            <img src="./gallery/9.jpg" alt="画廊9" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📹</div><div>gallery/9.mp4</div></div>'" />
+          </div>
+        </div>
       </div>
     </section>
+
+    <!-- ============================================================
+         CONTACT
+         ============================================================ -->
+    <section class="section" id="contact">
+      <div class="section-label reveal">
+        <div class="kicker">CONTACT</div>
+        <h2>联系我</h2>
+        <p class="section-desc">聊聊 AI、运营、金融，或者任何有趣的合作。</p>
+      </div>
+      <div class="contact-card pixel-box reveal">
+        <h2>让我们聊聊 👋</h2>
+        <p>
+          如果你也在探索 AI 如何落地真实业务，或者需要一个既能理解金融、又能动手做运营的伙伴，
+          欢迎随时联系我。我回复很快。
+        </p>
+        <div class="contact-links">
+          <a class="button primary" href="mailto:18064009641@163.com">📧 发邮件</a>
+          <a class="button secondary" href="https://github.com/Algernon8">GitHub ↗</a>
+          <a class="button ghost" href="tel:18064009641">📱 打电话</a>
+        </div>
+      </div>
+    </section>
+
   </main>
 
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
   <footer class="shell">
-    <span>PIXEL RESUME · Last updated: 2026-07-24</span>
-    <span>Finance / AI / Operations / Customer Success</span>
+    <span>© 2026 池一鸣 · YIMING.CV</span>
+    <span>Made with 🧡 · Finance × AI × Operations</span>
   </footer>
 
+  <!-- ============================================================
+       LIGHTBOX
+       ============================================================ -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">×</button>
+    <div id="lightbox-content"></div>
+  </div>
+
+  <!-- ============================================================
+       GAME — 像素栽树
+       ============================================================ -->
+  <div class="game-bar" aria-hidden="true">
+    <div class="game-ground"></div>
+    <div class="game-character" id="gameChar">
+      <div class="pixel-farmer" id="pixelFarmer"></div>
+    </div>
+    <!-- Trees will be injected here -->
+    <div id="treesContainer"></div>
+  </div>
+
+  <div class="game-hud">
+    <span>🌱</span>
+    <div class="game-hud-trees" id="treeProgress"></div>
+    <span id="gameAreaName">探索中</span>
+  </div>
+
+  <div class="game-hint">
+    ← → 移动 · 空格种树
+  </div>
+
+  <!-- Mobile controls -->
+  <div class="game-controls">
+    <button class="game-btn" ontouchstart="startMove(-1)" ontouchend="stopMove()" onmousedown="startMove(-1)" onmouseup="stopMove()" onmouseleave="stopMove()">←</button>
+    <button class="game-btn plant" ontouchstart="plantTree(); event.preventDefault()" onclick="plantTree()">🌱 种树</button>
+    <button class="game-btn" ontouchstart="startMove(1)" ontouchend="stopMove()" onmousedown="startMove(1)" onmouseup="stopMove()" onmouseleave="stopMove()">→</button>
+  </div>
+
+  <!-- Celebration -->
+  <div class="celebration" id="celebration">
+    <div class="celebration-msg">
+      <h3>🎉 恭喜通关！</h3>
+      <p>你已经探索完整个简历，种满了所有的树。</p>
+      <p style="margin-top:8px;">— 池一鸣 2026</p>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       SCRIPTS
+       ============================================================ -->
   <script>
+    /* -----------------------------------------------------------
+       Theme toggle
+       ----------------------------------------------------------- */
     const root = document.documentElement;
     const toggle = document.querySelector('.theme-toggle');
     const savedTheme = localStorage.getItem('resume-theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
     root.dataset.theme = savedTheme || (prefersDark ? 'dark' : 'light');
-
     toggle.addEventListener('click', () => {
-      const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
-      root.dataset.theme = nextTheme;
-      localStorage.setItem('resume-theme', nextTheme);
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      localStorage.setItem('resume-theme', next);
     });
+
+    /* -----------------------------------------------------------
+       Scroll reveal animations
+       ----------------------------------------------------------- */
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    /* -----------------------------------------------------------
+       Counter animation
+       ----------------------------------------------------------- */
+    function animateCounter(el) {
+      const target = parseInt(el.dataset.count, 10);
+      const duration = 1800;
+      const start = performance.now();
+
+      function step(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const val = Math.floor(eased * target);
+        el.textContent = val + (target >= 1000 ? '+' : '');
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = target + '+';
+      }
+      requestAnimationFrame(step);
+    }
+
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.stat-num[data-count]').forEach(el => counterObserver.observe(el));
+
+    /* -----------------------------------------------------------
+       Gallery Lightbox
+       ----------------------------------------------------------- */
+    function openLightbox(item) {
+      const lb = document.getElementById('lightbox');
+      const content = document.getElementById('lightbox-content');
+      const img = item.querySelector('img');
+      const video = item.querySelector('video');
+      if (img && img.src) {
+        content.innerHTML = `<img src="${img.src}" alt="" />`;
+      } else if (video) {
+        content.innerHTML = `<video src="${video.src}" controls autoplay></video>`;
+      } else {
+        return;
+      }
+      lb.classList.add('active');
+    }
+    function closeLightbox(e) {
+      if (e && e.target.closest('#lightbox-content') && e.target.tagName !== 'BUTTON') return;
+      document.getElementById('lightbox').classList.remove('active');
+      document.getElementById('lightbox-content').innerHTML = '';
+    }
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    /* -----------------------------------------------------------
+       PIXEL FARMER GAME
+       ----------------------------------------------------------- */
+    const gameChar = document.getElementById('gameChar');
+    const pixelFarmer = document.getElementById('pixelFarmer');
+    const treeProgress = document.getElementById('treeProgress');
+    const gameAreaName = document.getElementById('gameAreaName');
+    const treesContainer = document.getElementById('treesContainer');
+    const celebration = document.getElementById('celebration');
+
+    // Game state
+    let charX = window.innerWidth / 2;
+    let velocity = 0;
+    let moveDir = 0;
+    const SPEED = 5;
+    let isWalking = false;
+
+    // Tree areas - each section corresponds to a tree type
+    const treeAreas = [
+      { id: 'top', name: '首页', emoji: '🌅', color: 'var(--accent-2)', grown: false },
+      { id: 'about', name: '关于我', emoji: '🌱', color: 'var(--accent-3)', grown: false },
+      { id: 'work', name: '经历', emoji: '🌳', color: 'var(--accent-3)', grown: false },
+      { id: 'projects', name: '作品', emoji: '🌸', color: 'var(--accent)', grown: false },
+      { id: 'skills', name: '技能', emoji: '⭐', color: 'var(--accent-4)', grown: false },
+      { id: 'gallery', name: '画廊', emoji: '🎨', color: 'var(--sky)', grown: false },
+      { id: 'contact', name: '联系', emoji: '🏠', color: 'var(--accent-2)', grown: false },
+    ];
+
+    // Load saved progress
+    const saved = JSON.parse(localStorage.getItem('resume-trees') || '{}');
+    treeAreas.forEach(a => { if (saved[a.id]) a.grown = true; });
+
+    function updateProgressUI() {
+      treeProgress.innerHTML = treeAreas.map(a =>
+        `<span class="tree-dot ${a.grown ? 'grown' : ''}" title="${a.name}"></span>`
+      ).join('');
+    }
+    updateProgressUI();
+
+    // Render already-grown trees on load
+    function renderInitialTrees() {
+      treeAreas.forEach(area => {
+        if (area.grown) {
+          const section = document.getElementById(area.id);
+          if (section) {
+            const rect = section.getBoundingClientRect();
+            const treeX = rect.left + rect.width / 2 + window.scrollX;
+            createTreeElement(treeX, area);
+          }
+        }
+      });
+    }
+
+    function createTreeElement(x, area) {
+      const tree = document.createElement('div');
+      tree.className = 'tree';
+      tree.style.left = x + 'px';
+
+      const trunk = document.createElement('div');
+      trunk.className = 'tree-trunk';
+      const heights = { 'top': 30, 'about': 40, 'work': 60, 'projects': 50, 'skills': 55, 'gallery': 45, 'contact': 50 };
+      trunk.style.height = (heights[area.id] || 40) + 'px';
+
+      const leaves = document.createElement('div');
+      leaves.className = 'tree-leaves';
+      const sizes = { 'top': 30, 'about': 36, 'work': 56, 'projects': 46, 'skills': 50, 'gallery': 42, 'contact': 40 };
+      const s = sizes[area.id] || 40;
+      leaves.style.width = s + 'px';
+      leaves.style.height = s + 'px';
+      leaves.style.bottom = ((heights[area.id] || 40) - 10) + 'px';
+      leaves.style.background = area.color;
+
+      // Add emoji on top for some trees
+      if (area.emoji && area.id !== 'top' && area.id !== 'contact') {
+        const emoji = document.createElement('div');
+        emoji.style.cssText = `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:${s * 0.5}px;`;
+        emoji.textContent = area.emoji;
+        leaves.appendChild(emoji);
+      }
+
+      tree.appendChild(leaves);
+      tree.appendChild(trunk);
+      tree.dataset.area = area.id;
+      treesContainer.appendChild(tree);
+      return tree;
+    }
+
+    // Character movement
+    function updateChar() {
+      charX = Math.max(12, Math.min(window.innerWidth - 12, charX));
+      gameChar.style.left = charX + 'px';
+
+      // Update current area name
+      const scrollY = window.scrollY;
+      let currentArea = treeAreas[0];
+      treeAreas.forEach(area => {
+        const el = document.getElementById(area.id);
+        if (el) {
+          const top = el.offsetTop - 100;
+          if (scrollY >= top) currentArea = area;
+        }
+      });
+      gameAreaName.textContent = currentArea.name + (currentArea.grown ? ' ✓' : '');
+    }
+
+    function moveChar(dir) {
+      charX += dir * SPEED;
+      if (!isWalking) {
+        isWalking = true;
+        pixelFarmer.classList.add('walking');
+      }
+      // Flip character based on direction
+      pixelFarmer.style.transform = dir < 0 ? 'scaleX(-1)' : 'scaleX(1)';
+      updateChar();
+    }
+
+    // Keyboard controls
+    const keys = {};
+    document.addEventListener('keydown', (e) => {
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'Space'].includes(e.key) || e.code === 'Space') {
+        e.preventDefault();
+      }
+      keys[e.key] = true;
+
+      if (e.code === 'Space' || e.key === ' ') {
+        plantTree();
+      }
+    });
+    document.addEventListener('keyup', (e) => {
+      keys[e.key] = false;
+      checkWalking();
+    });
+
+    function checkWalking() {
+      if (!keys['ArrowLeft'] && !keys['ArrowRight'] && !keys['a'] && !keys['d'] && moveDir === 0) {
+        isWalking = false;
+        pixelFarmer.classList.remove('walking');
+      }
+    }
+
+    // Touch controls
+    function startMove(dir) {
+      moveDir = dir;
+      isWalking = true;
+      pixelFarmer.classList.add('walking');
+      pixelFarmer.style.transform = dir < 0 ? 'scaleX(-1)' : 'scaleX(1)';
+    }
+    function stopMove() {
+      moveDir = 0;
+      isWalking = false;
+      pixelFarmer.classList.remove('walking');
+    }
+
+    // Game loop
+    function gameLoop() {
+      if (keys['ArrowLeft'] || keys['a'] || moveDir === -1) {
+        moveChar(-1);
+      }
+      if (keys['ArrowRight'] || keys['d'] || moveDir === 1) {
+        moveChar(1);
+      }
+      requestAnimationFrame(gameLoop);
+    }
+    gameLoop();
+
+    // Plant tree
+    function plantTree() {
+      // Find which section is currently in view
+      const scrollY = window.scrollY + window.innerHeight / 2;
+      let currentArea = null;
+      treeAreas.forEach(area => {
+        const el = document.getElementById(area.id);
+        if (el) {
+          const top = el.offsetTop;
+          const bottom = top + el.offsetHeight;
+          if (scrollY >= top && scrollY < bottom) {
+            currentArea = area;
+          }
+        }
+      });
+
+      if (!currentArea) {
+        gameAreaName.textContent = '这里不能种树～';
+        setTimeout(() => updateChar(), 1000);
+        return;
+      }
+
+      if (currentArea.grown) {
+        gameAreaName.textContent = currentArea.name + ' 已经有树啦 ✓';
+        setTimeout(() => updateChar(), 1000);
+        return;
+      }
+
+      // Plant at current character position
+      currentArea.grown = true;
+      createTreeElement(charX, currentArea);
+
+      // Save
+      const toSave = {};
+      treeAreas.forEach(a => { if (a.grown) toSave[a.id] = true; });
+      localStorage.setItem('resume-trees', JSON.stringify(toSave));
+
+      updateProgressUI();
+      gameAreaName.textContent = '🌱 种了一棵' + currentArea.name + '之树！';
+
+      // Check completion
+      if (treeAreas.every(a => a.grown)) {
+        setTimeout(triggerCelebration, 500);
+      }
+
+      setTimeout(() => updateChar(), 1500);
+    }
+
+    // Celebration
+    function triggerCelebration() {
+      celebration.classList.add('active');
+
+      // Confetti
+      const colors = ['var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--accent-4)', 'var(--sky)'];
+      for (let i = 0; i < 50; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = `hsl(${Math.random() * 360}, 80%, 65%)`;
+        c.style.animationDelay = Math.random() * 0.5 + 's';
+        c.style.animationDuration = (2 + Math.random() * 2) + 's';
+        celebration.appendChild(c);
+      }
+
+      setTimeout(() => {
+        celebration.classList.remove('active');
+        setTimeout(() => {
+          celebration.querySelectorAll('.confetti').forEach(c => c.remove());
+        }, 500);
+      }, 5000);
+    }
+
+    // Init
+    window.addEventListener('load', () => {
+      updateChar();
+      setTimeout(renderInitialTrees, 100);
+    });
+
+    window.addEventListener('scroll', updateChar);
+    window.addEventListener('resize', updateChar);
+
+    // Re-render trees on scroll (recalculate positions relative to viewport)
+    // Actually trees are fixed-position so they move with scroll — we need them to stay
+    // at their section positions. Let's use position:absolute in game-bar instead.
+    // For simplicity: trees are fixed and stay at their x positions on screen.
+    // They're planted at the character's position which is screen-relative.
+    // This is fine for a fun mini-game effect.
   </script>
 </body>
 </html>
