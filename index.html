@@ -61,6 +61,7 @@
       margin: 0;
       min-height: 100vh;
       padding-bottom: 80px;
+      position: relative;
       color: var(--text);
       background:
         linear-gradient(45deg, rgba(60, 36, 24, 0.04) 25%, transparent 25%) 0 0 / 24px 24px,
@@ -1256,7 +1257,7 @@
     .game-tree {
       position: absolute;
       pointer-events: none;
-      z-index: 20;
+      z-index: 5;
       transform-origin: bottom center;
       animation: tree-grow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       opacity: 0.55;
@@ -2037,7 +2038,7 @@
        GAME — RPG 探索系统
        ============================================================ -->
   <!-- Trees are placed in the page (position:fixed) -->
-  <div id="treesLayer" style="position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden;"></div>
+  <div id="treesLayer" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;overflow:visible;transition:opacity 0.3s ease;"></div>
 
   <!-- Pixel hero character -->
   <div id="gameChar">
@@ -2077,6 +2078,11 @@
     <div class="hud-row">
       <span class="hud-label">位置</span>
       <span class="hud-area" id="hudArea">首页</span>
+    </div>
+    <div class="hud-row" style="margin-top:4px;padding-top:8px;border-top:2px dashed rgba(60,36,24,0.15);">
+      <button id="toggleTreesBtn" style="width:100%;padding:6px 10px;border:2px solid var(--line);background:var(--paper-2);font-size:11px;font-weight:900;cursor:pointer;color:var(--text);box-shadow:2px 2px 0 rgba(60,36,24,0.18);">
+        🌳 隐藏所有树
+      </button>
     </div>
   </div>
 
@@ -2496,15 +2502,16 @@
 
         // Plant the tree at the LEFT EDGE of the current section
         // (so it doesn't block the text content in the middle)
+        // Use PAGE coordinates (not viewport) so trees stay in place when scrolling
         const sectionEl = document.querySelector(currentSection.selector);
-        let treeX = state.x;
-        let treeY = state.y;
+        let treeX = state.x + window.scrollX;
+        let treeY = state.y + window.scrollY;
         if (sectionEl) {
           const r = sectionEl.getBoundingClientRect();
           // Snap to left side of the section (with some padding)
-          treeX = r.left + 30 + Math.random() * 20;
+          treeX = r.left + window.scrollX + 30 + Math.random() * 20;
           // Position near the top of the section
-          treeY = r.top + 50 + Math.random() * 30;
+          treeY = r.top + window.scrollY + 50 + Math.random() * 30;
         }
 
         state.trees[currentSection.id] = {
@@ -2855,11 +2862,37 @@
 
       // ---- Init ----
       function init() {
+        // Ensure trees layer covers the full document height
+        const docHeight = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        );
+        treesLayer.style.height = docHeight + 'px';
+
         initHUD();
         gameChar.style.left = state.x + 'px';
         gameChar.style.top = state.y + 'px';
         renderAllTrees();
         gameLoop();
+
+        // Tree toggle button
+        const toggleBtn = document.getElementById('toggleTreesBtn');
+        let treesVisible = true;
+        if (toggleBtn) {
+          toggleBtn.addEventListener('click', () => {
+            treesVisible = !treesVisible;
+            treesLayer.style.opacity = treesVisible ? '1' : '0';
+            treesLayer.style.pointerEvents = treesVisible ? 'none' : 'none';
+            toggleBtn.textContent = treesVisible ? '🌳 隐藏所有树' : '🌲 显示所有树';
+            localStorage.setItem('resume-trees-visible', treesVisible ? '1' : '0');
+          });
+          // Load saved preference
+          if (localStorage.getItem('resume-trees-visible') === '0') {
+            treesVisible = false;
+            treesLayer.style.opacity = '0';
+            toggleBtn.textContent = '🌲 显示所有树';
+          }
+        }
 
         // Hide hint after 5 seconds
         setTimeout(() => {
@@ -2880,12 +2913,17 @@
         window.addEventListener('load', init);
       }
 
-      // Handle resize - keep character in bounds
+      // Handle resize - keep character in bounds + update trees layer height
       window.addEventListener('resize', () => {
         state.x = Math.min(state.x, window.innerWidth - 16);
         state.y = Math.min(state.y, window.innerHeight - 16);
         gameChar.style.left = state.x + 'px';
         gameChar.style.top = state.y + 'px';
+        const docHeight = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        );
+        treesLayer.style.height = docHeight + 'px';
       });
     })();
   </script>
