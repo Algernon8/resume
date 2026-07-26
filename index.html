@@ -1203,6 +1203,87 @@
       min-width: 220px;
       pointer-events: auto;
     }
+    /* Tree detail card (draggable) */
+    #treeDetail {
+      position: fixed;
+      z-index: 60;
+      width: 280px;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow);
+      display: none;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--text);
+    }
+    #treeDetail.show { display: block; }
+    .tree-detail-header {
+      padding: 10px 14px;
+      background: var(--accent-2);
+      color: #2f1c13;
+      border-bottom: 3px solid var(--line);
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    [data-theme="dark"] .tree-detail-header { color: #2f1c13; }
+    .tree-detail-header:active { cursor: grabbing; }
+    .tree-detail-title {
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .tree-detail-close {
+      width: 24px; height: 24px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--line);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 2px 2px 0 var(--line);
+    }
+    .tree-detail-close:active {
+      transform: translate(2px, 2px);
+      box-shadow: none;
+    }
+    .tree-detail-body {
+      padding: 14px;
+    }
+    .tree-detail-body h4 {
+      margin: 0 0 8px 0;
+      font-size: 13px;
+      color: var(--ink);
+    }
+    .tree-detail-fruits {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .tree-detail-fruits span {
+      padding: 4px 8px;
+      border: 2px solid var(--line);
+      background: var(--paper-2);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .tree-detail-desc {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 2px dashed rgba(60,36,24,0.2);
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+    [data-theme="dark"] .tree-detail-desc {
+      border-top-color: rgba(246, 212, 166, 0.2);
+    }
+
     .hud-row {
       display: flex;
       align-items: center;
@@ -1257,16 +1338,19 @@
     /* Tree with fruits */
     .game-tree {
       position: absolute;
-      pointer-events: none;
+      pointer-events: auto;
+      cursor: pointer;
       z-index: 5;
       transform-origin: bottom center;
       animation: tree-grow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
       opacity: 0.55;
       mix-blend-mode: multiply;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
     .game-tree:hover {
       opacity: 0.9;
+      transform: scale(1.1);
+      z-index: 10;
     }
     [data-theme="dark"] .game-tree {
       mix-blend-mode: screen;
@@ -2046,6 +2130,20 @@
   <!-- Trees are placed in the page (position:fixed) -->
   <div id="treesLayer" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5;overflow:visible;transition:opacity 0.3s ease;"></div>
 
+  <!-- Tree detail card (draggable) -->
+  <div id="treeDetail">
+    <div class="tree-detail-header" id="treeDetailHeader">
+      <span class="tree-detail-title">🌳 树详情</span>
+      <button class="tree-detail-close" id="treeDetailClose">×</button>
+    </div>
+    <div class="tree-detail-body">
+      <h4 id="treeDetailName">—</h4>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">关键词果实：</div>
+      <div class="tree-detail-fruits" id="treeDetailFruits"></div>
+      <div class="tree-detail-desc" id="treeDetailDesc"></div>
+    </div>
+  </div>
+
   <!-- Pixel hero character -->
   <div id="gameChar">
     <div class="pixel-hero" id="pixelHero">
@@ -2086,8 +2184,11 @@
       <span class="hud-area" id="hudArea">首页</span>
     </div>
     <div class="hud-row" style="margin-top:4px;padding-top:8px;border-top:2px dashed rgba(60,36,24,0.15);">
-      <button id="toggleTreesBtn" style="width:100%;padding:6px 10px;border:2px solid var(--line);background:var(--paper-2);font-size:11px;font-weight:900;cursor:pointer;color:var(--text);box-shadow:2px 2px 0 rgba(60,36,24,0.18);">
-        🌳 隐藏所有树
+      <button id="toggleTreesBtn" style="flex:1;padding:6px 8px;border:2px solid var(--line);background:var(--paper-2);font-size:10px;font-weight:900;cursor:pointer;color:var(--text);box-shadow:2px 2px 0 rgba(60,36,24,0.18);">
+        🌳 隐藏
+      </button>
+      <button id="resetTreesBtn" style="flex:1;padding:6px 8px;border:2px solid var(--line);background:var(--paper-2);font-size:10px;font-weight:900;cursor:pointer;color:var(--text);box-shadow:2px 2px 0 rgba(60,36,24,0.18);">
+        🗑️ 清空
       </button>
     </div>
   </div>
@@ -2329,6 +2430,106 @@
 
       const BADGE_ORDER = ['badge-ai', 'badge-ops', 'badge-data', 'badge-soft'];
       const BADGE_ICONS = { 'badge-ai': '🤖', 'badge-ops': '📊', 'badge-data': '💻', 'badge-soft': '🎯' };
+
+      // ---- Tree detail card (draggable) ----
+      const treeDetail = document.getElementById('treeDetail');
+      const treeDetailHeader = document.getElementById('treeDetailHeader');
+      const treeDetailClose = document.getElementById('treeDetailClose');
+      const treeDetailName = document.getElementById('treeDetailName');
+      const treeDetailFruits = document.getElementById('treeDetailFruits');
+      const treeDetailDesc = document.getElementById('treeDetailDesc');
+
+      const treeDescriptions = {
+        'hero': '这里是首页，故事的起点。往下走，慢慢探索我的简历～',
+        'about': '关于我板块，三个关键词概括了我的核心能力模型。',
+        'work': '实习经历区，三段经历一步步走向 AI + 业务运营的方向。',
+        'projects': '代表作品，每一个都是从 0 到 1 实打实做出来的项目。',
+        'skills': '技能地图，四大分支构成了我的能力树。',
+        'gallery': '照片画廊，工作和生活中的一些片段。',
+        'contact': '联系方式，欢迎随时聊聊～',
+      };
+
+      function showTreeDetail(zoneId) {
+        const zone = zones.find(z => z.id === zoneId);
+        if (!zone) return;
+
+        treeDetailName.textContent = zone.name + ' 之树';
+        treeDetailFruits.innerHTML = '';
+        (zone.fruits || []).forEach(f => {
+          const span = document.createElement('span');
+          span.textContent = f;
+          treeDetailFruits.appendChild(span);
+        });
+        treeDetailDesc.textContent = treeDescriptions[zoneId] || '一棵充满故事的树。';
+
+        treeDetail.classList.add('show');
+        // Position near the tree (but within viewport)
+        const treeData = state.trees[zoneId];
+        if (treeData) {
+          let left = treeData.x - window.scrollX + 40;
+          let top = treeData.y - window.scrollY - 60;
+          left = Math.max(10, Math.min(left, window.innerWidth - 290));
+          top = Math.max(10, Math.min(top, window.innerHeight - 200));
+          treeDetail.style.left = left + 'px';
+          treeDetail.style.top = top + 'px';
+        } else {
+          treeDetail.style.left = (window.innerWidth / 2 - 140) + 'px';
+          treeDetail.style.top = (window.innerHeight / 3) + 'px';
+        }
+      }
+
+      function closeTreeDetail() {
+        treeDetail.classList.remove('show');
+      }
+
+      if (treeDetailClose) {
+        treeDetailClose.addEventListener('click', closeTreeDetail);
+      }
+
+      // Make draggable
+      (function makeDraggable() {
+        if (!treeDetail || !treeDetailHeader) return;
+        let isDragging = false;
+        let startX, startY, startLeft, startTop;
+
+        function onDown(cx, cy) {
+          isDragging = true;
+          startX = cx; startY = cy;
+          const rect = treeDetail.getBoundingClientRect();
+          startLeft = rect.left;
+          startTop = rect.top;
+        }
+        function onMove(cx, cy) {
+          if (!isDragging) return;
+          let nl = startLeft + (cx - startX);
+          let nt = startTop + (cy - startY);
+          nl = Math.max(0, Math.min(nl, window.innerWidth - treeDetail.offsetWidth));
+          nt = Math.max(0, Math.min(nt, window.innerHeight - treeDetail.offsetHeight));
+          treeDetail.style.left = nl + 'px';
+          treeDetail.style.top = nt + 'px';
+        }
+        function onUp() { isDragging = false; }
+
+        treeDetailHeader.addEventListener('mousedown', (e) => {
+          if (e.target.closest('.tree-detail-close')) return;
+          onDown(e.clientX, e.clientY);
+          e.preventDefault();
+        });
+        document.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+        document.addEventListener('mouseup', onUp);
+
+        treeDetailHeader.addEventListener('touchstart', (e) => {
+          if (e.target.closest('.tree-detail-close')) return;
+          const t = e.touches[0];
+          onDown(t.clientX, t.clientY);
+        }, { passive: true });
+        document.addEventListener('touchmove', (e) => {
+          if (!isDragging) return;
+          const t = e.touches[0];
+          onMove(t.clientX, t.clientY);
+        }, { passive: true });
+        document.addEventListener('touchend', onUp);
+      })();
 
       // ---- Initialize HUD ----
       function initHUD() {
@@ -2587,8 +2788,18 @@
         leaves.appendChild(fruitsContainer);
         tree.appendChild(leaves);
         tree.appendChild(trunk);
+
+        tree.dataset.zoneId = treeData.zoneId;
+        tree.style.pointerEvents = 'auto';
+        tree.addEventListener('click', (e) => {
+          e.stopPropagation();
+          showTreeDetail(treeData.zoneId);
+        });
+
         treesLayer.appendChild(tree);
       }
+
+      // Tree click handler note: each tree has its own click listener above.
 
       function renderAllTrees() {
         treesLayer.innerHTML = '';
@@ -3103,15 +3314,30 @@
             treesVisible = !treesVisible;
             treesLayer.style.opacity = treesVisible ? '1' : '0';
             treesLayer.style.pointerEvents = treesVisible ? 'none' : 'none';
-            toggleBtn.textContent = treesVisible ? '🌳 隐藏所有树' : '🌲 显示所有树';
+            toggleBtn.textContent = treesVisible ? '🌳 隐藏' : '🌲 显示';
             localStorage.setItem('resume-trees-visible', treesVisible ? '1' : '0');
           });
           // Load saved preference
           if (localStorage.getItem('resume-trees-visible') === '0') {
             treesVisible = false;
             treesLayer.style.opacity = '0';
-            toggleBtn.textContent = '🌲 显示所有树';
+            toggleBtn.textContent = '🌲 显示';
           }
+        }
+
+        // Reset trees button
+        const resetBtn = document.getElementById('resetTreesBtn');
+        if (resetBtn) {
+          resetBtn.addEventListener('click', () => {
+            if (!confirm('确定要清空所有树吗？种过的树都会消失哦～')) return;
+            state.trees = {};
+            state.easterEggs.delete('completion');
+            treesLayer.innerHTML = '';
+            saveProgress();
+            updateHUD();
+            // Show confirmation
+            showDialogue('🗑️ 所有树都清空了，重新种吧！');
+          });
         }
 
         // Hide hint after 5 seconds
