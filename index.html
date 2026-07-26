@@ -969,93 +969,294 @@
     }
 
     /* ============================================================
-       GAME — 像素栽树小游戏
+       GAME — RPG 探索系统
        ============================================================ */
-    .game-bar {
+
+    /* The character is position:fixed, moves freely across the page */
+    #gameChar {
       position: fixed;
-      bottom: 0; left: 0; right: 0;
-      height: 72px;
-      background: linear-gradient(180deg, transparent 0%, var(--bg-2) 20%, var(--paper-3) 100%);
-      border-top: 3px solid var(--line);
-      z-index: 30;
+      left: 50%;
+      top: 50%;
+      width: 32px;
+      height: 48px;
+      z-index: 50;
       pointer-events: none;
-    }
-    .game-ground {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 24px;
-      background: var(--accent-3);
-      border-top: 3px solid var(--line);
-    }
-    [data-theme="dark"] .game-ground {
-      background: #5a8a4d;
-    }
-    .game-ground::before {
-      content: "";
-      position: absolute;
-      top: -2px; left: 0; right: 0;
-      height: 6px;
-      background: repeating-linear-gradient(
-        90deg,
-        var(--accent-3) 0 12px,
-        rgba(60, 36, 24, 0.15) 12px 14px
-      );
+      transform: translate(-50%, -50%);
+      transition: none;
     }
 
-    .game-character {
-      position: absolute;
-      bottom: 24px;
-      left: 50%;
-      width: 24px;
-      height: 24px;
-      transform: translateX(-50%);
-      pointer-events: none;
-      z-index: 31;
-      transition: left 0.08s linear;
-    }
-    .pixel-farmer {
+    .pixel-hero {
+      position: relative;
       width: 100%;
       height: 100%;
-      position: relative;
-      background: #f1b388;
-      border: 3px solid var(--line);
-      box-shadow:
-        /* hat */
-        0 -9px 0 -3px var(--accent-3),
-        -6px -9px 0 -3px var(--accent-3),
-        6px -9px 0 -3px var(--accent-3),
-        /* body */
-        0 9px 0 3px var(--accent-3),
-        /* arms */
-        -12px 9px 0 0 var(--line),
-        12px 9px 0 0 var(--line),
-        /* legs */
-        -6px 27px 0 0 var(--accent-4),
-        6px 27px 0 0 var(--accent-4),
-        /* shoes */
-        -6px 36px 0 0 var(--line),
-        6px 36px 0 0 var(--line);
-      animation: farmer-bob 0.6s ease-in-out infinite;
-    }
-    @keyframes farmer-bob {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-2px); }
-    }
-    .pixel-farmer.walking {
-      animation: farmer-walk 0.3s ease-in-out infinite;
-    }
-    @keyframes farmer-walk {
-      0%, 100% { transform: translateY(0) scaleX(1); }
-      25% { transform: translateY(-3px) scaleX(0.95); }
-      50% { transform: translateY(0) scaleX(1); }
-      75% { transform: translateY(-2px) scaleX(1.05); }
     }
 
-    .tree {
+    /* Hero body - pixel art via box-shadow */
+    .pixel-hero-body {
       position: absolute;
-      bottom: 24px;
+      left: 50%;
+      top: 10px;
+      width: 16px;
+      height: 16px;
+      transform: translateX(-50%);
+      background: #f1b388;
+      border: 2px solid var(--line);
+    }
+
+    /* Hat */
+    .pixel-hero-hat {
+      position: absolute;
+      left: 50%;
+      top: 2px;
+      width: 20px;
+      height: 8px;
+      transform: translateX(-50%);
+      background: var(--accent-3);
+      border: 2px solid var(--line);
+      border-bottom: none;
+    }
+    .pixel-hero-hat::before {
+      content: "";
+      position: absolute;
+      left: -4px; bottom: -2px;
+      width: 28px; height: 4px;
+      background: var(--accent-3);
+      border: 2px solid var(--line);
+      border-radius: 2px;
+    }
+
+    /* Eyes */
+    .pixel-hero-eyes {
+      position: absolute;
+      left: 50%;
+      top: 16px;
+      width: 8px; height: 2px;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: space-between;
+    }
+    .pixel-hero-eyes::before,
+    .pixel-hero-eyes::after {
+      content: "";
+      width: 2px; height: 2px;
+      background: var(--line);
+    }
+
+    /* Body / shirt */
+    .pixel-hero-torso {
+      position: absolute;
+      left: 50%;
+      top: 26px;
+      width: 18px;
+      height: 14px;
+      transform: translateX(-50%);
+      background: var(--accent);
+      border: 2px solid var(--line);
+    }
+
+    /* Arms */
+    .pixel-hero-arms {
+      position: absolute;
+      left: 50%;
+      top: 28px;
+      width: 28px;
+      height: 10px;
+      transform: translateX(-50%);
+    }
+    .pixel-hero-arms::before,
+    .pixel-hero-arms::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 4px;
+      height: 10px;
+      background: #f1b388;
+      border: 2px solid var(--line);
+    }
+    .pixel-hero-arms::before { left: 0; }
+    .pixel-hero-arms::after { right: 0; }
+
+    /* Legs */
+    .pixel-hero-legs {
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 16px;
+      height: 10px;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: space-between;
+    }
+    .pixel-hero-legs::before,
+    .pixel-hero-legs::after {
+      content: "";
+      width: 5px;
+      height: 10px;
+      background: var(--accent-4);
+      border: 2px solid var(--line);
+    }
+
+    /* Walking animation */
+    .pixel-hero.walking .pixel-hero-legs::before {
+      animation: leg-walk-l 0.3s ease-in-out infinite;
+    }
+    .pixel-hero.walking .pixel-hero-legs::after {
+      animation: leg-walk-r 0.3s ease-in-out infinite;
+    }
+    @keyframes leg-walk-l {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    @keyframes leg-walk-r {
+      0%, 100% { transform: translateY(-3px); }
+      50% { transform: translateY(0); }
+    }
+    .pixel-hero.walking .pixel-hero-body {
+      animation: body-bob 0.3s ease-in-out infinite;
+    }
+    @keyframes body-bob {
+      0%, 100% { margin-top: 0; }
+      50% { margin-top: -1px; }
+    }
+
+    /* Direction: flip horizontally for left */
+    .pixel-hero.face-left { transform: scaleX(-1); }
+    .pixel-hero.face-right { transform: scaleX(1); }
+
+    /* Shadow */
+    .pixel-hero-shadow {
+      position: absolute;
+      left: 50%;
+      bottom: -4px;
+      width: 20px;
+      height: 6px;
+      transform: translateX(-50%);
+      background: rgba(60, 36, 24, 0.25);
+      border-radius: 50%;
+    }
+
+    /* Dialogue bubble */
+    #gameDialogue {
+      position: fixed;
+      z-index: 51;
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 180px;
+      max-width: 320px;
+      padding: 12px 16px;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow);
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.6;
+      color: var(--text);
+      display: none;
       pointer-events: none;
-      z-index: 29;
+    }
+    #gameDialogue.show {
+      display: block;
+      animation: bubble-pop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #gameDialogue::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid var(--line);
+    }
+    #gameDialogue::before {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid var(--paper);
+      z-index: 1;
+    }
+    @keyframes bubble-pop {
+      0% { transform: translateX(-50%) scale(0.8); opacity: 0; }
+      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    }
+
+    /* HUD */
+    #gameHud {
+      position: fixed;
+      bottom: 16px;
+      left: 16px;
+      z-index: 40;
+      padding: 12px 14px;
+      border: 3px solid var(--line);
+      background: var(--paper);
+      box-shadow: var(--pixel-shadow-soft);
+      font-size: 12px;
+      font-weight: 900;
+      min-width: 220px;
+      pointer-events: auto;
+    }
+    .hud-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .hud-row:last-child { margin-bottom: 0; }
+    .hud-label {
+      color: var(--muted);
+      min-width: 50px;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+    .hud-progress {
+      display: flex;
+      gap: 4px;
+    }
+    .hud-dot {
+      width: 12px; height: 12px;
+      border: 2px solid var(--line);
+      background: var(--paper-2);
+    }
+    .hud-dot.done { background: var(--accent-3); }
+    .hud-badges {
+      display: flex;
+      gap: 4px;
+    }
+    .hud-badge {
+      width: 20px; height: 20px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--line);
+      background: var(--paper-2);
+      font-size: 11px;
+      opacity: 0.4;
+      transition: all 0.3s ease;
+    }
+    .hud-badge.collected {
+      opacity: 1;
+      background: var(--accent-2);
+      animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes badge-pop {
+      0% { transform: scale(0); }
+      60% { transform: scale(1.3); }
+      100% { transform: scale(1); }
+    }
+    .hud-area {
+      color: var(--ink);
+    }
+
+    /* Tree with fruits */
+    .game-tree {
+      position: absolute;
+      pointer-events: none;
+      z-index: 30;
       transform-origin: bottom center;
       animation: tree-grow 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -1063,106 +1264,92 @@
       0% { transform: scaleY(0) scaleX(0.5); opacity: 0; }
       100% { transform: scaleY(1) scaleX(1); opacity: 1; }
     }
-    .tree-trunk {
+    .game-tree-trunk {
       position: absolute;
-      bottom: 0;
-      left: 50%;
+      bottom: 0; left: 50%;
       transform: translateX(-50%);
-      width: 8px;
+      width: 10px;
       background: #8a5a36;
       border: 2px solid var(--line);
     }
-    .tree-leaves {
+    .game-tree-leaves {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
       border-radius: 50%;
       border: 3px solid var(--line);
-    }
-
-    .game-hud {
-      position: fixed;
-      bottom: 82px;
-      left: 20px;
-      z-index: 32;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border: 3px solid var(--line);
-      background: var(--paper);
-      box-shadow: var(--pixel-shadow-soft);
-      font-size: 12px;
-      font-weight: 900;
-      pointer-events: auto;
+      justify-content: center;
     }
-    .game-hud-trees {
-      display: flex;
-      gap: 4px;
+    .game-tree-fruits {
+      position: absolute;
+      inset: -20px -20px -20px -20px;
+      pointer-events: none;
     }
-    .tree-dot {
-      width: 14px; height: 14px;
+    .tree-fruit {
+      position: absolute;
+      padding: 2px 6px;
       border: 2px solid var(--line);
-      background: var(--paper-2);
-    }
-    .tree-dot.grown { background: var(--accent-3); }
-    .game-hint {
-      position: fixed;
-      bottom: 82px;
-      right: 20px;
-      z-index: 32;
-      padding: 8px 12px;
-      border: 3px solid var(--line);
-      background: var(--accent-2);
-      color: #2f1c13;
-      box-shadow: var(--pixel-shadow-soft);
-      font-size: 12px;
+      background: var(--paper);
+      font-size: 9px;
       font-weight: 900;
-      pointer-events: auto;
-      animation: hint-bounce 2s ease-in-out infinite;
+      white-space: nowrap;
+      box-shadow: 2px 2px 0 rgba(60,36,24,0.3);
+      animation: fruit-appear 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s backwards;
     }
-    @keyframes hint-bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
+    @keyframes fruit-appear {
+      0% { transform: scale(0); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
-    /* Touch controls for mobile */
-    .game-controls {
+    /* Mobile controls - D-pad */
+    .game-dpad {
       position: fixed;
-      bottom: 82px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 20px;
+      right: 20px;
+      z-index: 40;
       display: none;
-      gap: 8px;
-      z-index: 32;
       pointer-events: auto;
     }
-    .game-btn {
-      width: 44px; height: 44px;
+    .dpad-row {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+    .dpad-btn {
+      width: 48px; height: 48px;
       display: grid;
       place-items: center;
       border: 3px solid var(--line);
       background: var(--paper);
       box-shadow: 3px 3px 0 var(--line);
       font-weight: 900;
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
       user-select: none;
       -webkit-user-select: none;
       touch-action: manipulation;
     }
-    .game-btn:active {
+    .dpad-btn:active {
       transform: translate(2px, 2px);
       box-shadow: 1px 1px 0 var(--line);
     }
-    .game-btn.plant {
-      width: auto;
-      padding: 0 14px;
+    .dpad-btn.action {
       background: var(--accent-3);
       color: #fff9ea;
+      font-size: 18px;
+    }
+    .dpad-center {
+      width: 48px; height: 48px;
+      display: grid;
+      place-items: center;
+      font-size: 10px;
+      color: var(--muted);
+      font-weight: 900;
     }
 
-    /* Celebration overlay */
+    /* Celebration */
     .celebration {
       position: fixed;
       inset: 0;
@@ -1183,13 +1370,12 @@
     }
     .celebration-msg {
       position: absolute;
-      top: 40%;
-      left: 50%;
+      top: 40%; left: 50%;
       transform: translate(-50%, -50%);
-      padding: 24px 36px;
+      padding: 28px 40px;
       border: 4px solid var(--line);
       background: var(--paper);
-      box-shadow: var(--pixel-shadow-lg);
+      box-shadow: 8px 8px 0 var(--line);
       text-align: center;
       animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
@@ -1207,6 +1393,52 @@
       font-size: 14px;
       font-weight: 900;
       color: var(--text);
+    }
+
+    /* Floating paper (contact easter egg) */
+    .float-paper {
+      position: fixed;
+      z-index: 35;
+      padding: 4px 10px;
+      border: 2px solid var(--line);
+      background: var(--paper-2);
+      font-size: 11px;
+      font-weight: 900;
+      pointer-events: none;
+      animation: float-down 4s ease-in forwards;
+    }
+    @keyframes float-down {
+      0% { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Hint banner */
+    #gameHint {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 40;
+      padding: 10px 18px;
+      border: 3px solid var(--line);
+      background: var(--accent-2);
+      color: #2f1c13;
+      box-shadow: var(--pixel-shadow-soft);
+      font-size: 13px;
+      font-weight: 900;
+      pointer-events: none;
+      animation: hint-float 2s ease-in-out infinite;
+    }
+    [data-theme="dark"] #gameHint { color: #2f1c13; }
+    @keyframes hint-float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-4px); }
+    }
+    #gameHint.hide {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
     }
 
     /* ============================================================
@@ -1254,9 +1486,15 @@
       .stat-card { padding: 14px 10px; }
       .gallery-grid { grid-template-columns: 1fr; }
       footer { flex-direction: column; }
-      .game-hint { display: none; }
-      .game-controls { display: flex; }
-      .game-hud { font-size: 11px; padding: 6px 10px; }
+      .game-dpad { display: block; }
+      #gameHud {
+        bottom: auto;
+        top: 70px;
+        left: 10px;
+        min-width: 180px;
+        font-size: 11px;
+        padding: 8px 10px;
+      }
     }
   </style>
 </head>
@@ -1785,40 +2023,84 @@
   </div>
 
   <!-- ============================================================
-       GAME — 像素栽树
+       GAME — RPG 探索系统
        ============================================================ -->
-  <div class="game-bar" aria-hidden="true">
-    <div class="game-ground"></div>
-    <div class="game-character" id="gameChar">
-      <div class="pixel-farmer" id="pixelFarmer"></div>
+  <!-- Trees are placed in the page (position:fixed) -->
+  <div id="treesLayer" style="position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden;"></div>
+
+  <!-- Pixel hero character -->
+  <div id="gameChar">
+    <div class="pixel-hero" id="pixelHero">
+      <div class="pixel-hero-shadow"></div>
+      <div class="pixel-hero-hat"></div>
+      <div class="pixel-hero-body"></div>
+      <div class="pixel-hero-eyes"></div>
+      <div class="pixel-hero-torso"></div>
+      <div class="pixel-hero-arms"></div>
+      <div class="pixel-hero-legs"></div>
     </div>
-    <!-- Trees will be injected here -->
-    <div id="treesContainer"></div>
   </div>
 
-  <div class="game-hud">
-    <span>🌱</span>
-    <div class="game-hud-trees" id="treeProgress"></div>
-    <span id="gameAreaName">探索中</span>
+  <!-- Dialogue bubble -->
+  <div id="gameDialogue"></div>
+
+  <!-- Hint -->
+  <div id="gameHint">
+    🎮 WASD / 方向键移动 · 空格互动
   </div>
 
-  <div class="game-hint">
-    ← → 移动 · 空格种树
+  <!-- HUD -->
+  <div id="gameHud">
+    <div class="hud-row">
+      <span class="hud-label">探索</span>
+      <div class="hud-progress" id="hudExplore"></div>
+    </div>
+    <div class="hud-row">
+      <span class="hud-label">种树</span>
+      <div class="hud-progress" id="hudTrees"></div>
+    </div>
+    <div class="hud-row">
+      <span class="hud-label">徽章</span>
+      <div class="hud-badges" id="hudBadges"></div>
+    </div>
+    <div class="hud-row">
+      <span class="hud-label">位置</span>
+      <span class="hud-area" id="hudArea">首页</span>
+    </div>
   </div>
 
-  <!-- Mobile controls -->
-  <div class="game-controls">
-    <button class="game-btn" ontouchstart="startMove(-1)" ontouchend="stopMove()" onmousedown="startMove(-1)" onmouseup="stopMove()" onmouseleave="stopMove()">←</button>
-    <button class="game-btn plant" ontouchstart="plantTree(); event.preventDefault()" onclick="plantTree()">🌱 种树</button>
-    <button class="game-btn" ontouchstart="startMove(1)" ontouchend="stopMove()" onmousedown="startMove(1)" onmouseup="stopMove()" onmouseleave="stopMove()">→</button>
+  <!-- Mobile D-pad -->
+  <div class="game-dpad">
+    <div class="dpad-row">
+      <div></div>
+      <button class="dpad-btn" ontouchstart="gameStartMove(0,-1)" ontouchend="gameStopMove(0,-1)"
+              onmousedown="gameStartMove(0,-1)" onmouseup="gameStopMove(0,-1)" onmouseleave="gameStopMove(0,-1)">↑</button>
+      <div></div>
+    </div>
+    <div class="dpad-row">
+      <button class="dpad-btn" ontouchstart="gameStartMove(-1,0)" ontouchend="gameStopMove(-1,0)"
+              onmousedown="gameStartMove(-1,0)" onmouseup="gameStopMove(-1,0)" onmouseleave="gameStopMove(-1,0)">←</button>
+      <div class="dpad-center">
+        <button class="dpad-btn action" ontouchstart="gameAction(); event.preventDefault()" onclick="gameAction()"
+                style="position:absolute;width:56px;height:56px;margin-top:-4px;">🌱</button>
+      </div>
+      <button class="dpad-btn" ontouchstart="gameStartMove(1,0)" ontouchend="gameStopMove(1,0)"
+              onmousedown="gameStartMove(1,0)" onmouseup="gameStopMove(1,0)" onmouseleave="gameStopMove(1,0)">→</button>
+    </div>
+    <div class="dpad-row">
+      <div></div>
+      <button class="dpad-btn" ontouchstart="gameStartMove(0,1)" ontouchend="gameStopMove(0,1)"
+              onmousedown="gameStartMove(0,1)" onmouseup="gameStopMove(0,1)" onmouseleave="gameStopMove(0,1)">↓</button>
+      <div></div>
+    </div>
   </div>
 
   <!-- Celebration -->
   <div class="celebration" id="celebration">
     <div class="celebration-msg">
-      <h3>🎉 恭喜通关！</h3>
-      <p>你已经探索完整个简历，种满了所有的树。</p>
-      <p style="margin-top:8px;">— 池一鸣 2026</p>
+      <h3>🎉 简历探索完成！</h3>
+      <p>你逛遍了整个简历，种满了所有的树。</p>
+      <p style="margin-top:8px;">感谢你的耐心探索 — 池一鸣</p>
     </div>
   </div>
 
@@ -1911,257 +2193,672 @@
     });
 
     /* -----------------------------------------------------------
-       PIXEL FARMER GAME
+       RPG EXPLORATION GAME
        ----------------------------------------------------------- */
-    const gameChar = document.getElementById('gameChar');
-    const pixelFarmer = document.getElementById('pixelFarmer');
-    const treeProgress = document.getElementById('treeProgress');
-    const gameAreaName = document.getElementById('gameAreaName');
-    const treesContainer = document.getElementById('treesContainer');
-    const celebration = document.getElementById('celebration');
+    (function() {
+      const gameChar = document.getElementById('gameChar');
+      const pixelHero = document.getElementById('pixelHero');
+      const gameDialogue = document.getElementById('gameDialogue');
+      const gameHint = document.getElementById('gameHint');
+      const hudExplore = document.getElementById('hudExplore');
+      const hudTrees = document.getElementById('hudTrees');
+      const hudBadges = document.getElementById('hudBadges');
+      const hudArea = document.getElementById('hudArea');
+      const treesLayer = document.getElementById('treesLayer');
+      const celebration = document.getElementById('celebration');
 
-    // Game state
-    let charX = window.innerWidth / 2;
-    let velocity = 0;
-    let moveDir = 0;
-    const SPEED = 5;
-    let isWalking = false;
+      // ---- Game state ----
+      const state = {
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        vx: 0,
+        vy: 0,
+        speed: 4,
+        facing: 'down', // up/down/left/right
+        walking: false,
+        currentZone: null,
+        explored: new Set(),
+        trees: {},  // zoneId -> {x, y, zoneId}
+        badges: new Set(),
+        dialoguesShown: new Set(),
+        easterEggs: new Set(),
+      };
 
-    // Tree areas - each section corresponds to a tree type
-    const treeAreas = [
-      { id: 'top', name: '首页', emoji: '🌅', color: 'var(--accent-2)', grown: false },
-      { id: 'about', name: '关于我', emoji: '🌱', color: 'var(--accent-3)', grown: false },
-      { id: 'work', name: '经历', emoji: '🌳', color: 'var(--accent-3)', grown: false },
-      { id: 'projects', name: '作品', emoji: '🌸', color: 'var(--accent)', grown: false },
-      { id: 'skills', name: '技能', emoji: '⭐', color: 'var(--accent-4)', grown: false },
-      { id: 'gallery', name: '画廊', emoji: '🎨', color: 'var(--sky)', grown: false },
-      { id: 'contact', name: '联系', emoji: '🏠', color: 'var(--accent-2)', grown: false },
-    ];
+      // Load saved progress
+      try {
+        const saved = JSON.parse(localStorage.getItem('resume-rpg') || '{}');
+        if (saved.explored) state.explored = new Set(saved.explored);
+        if (saved.trees) state.trees = saved.trees;
+        if (saved.badges) state.badges = new Set(saved.badges);
+        if (saved.easterEggs) state.easterEggs = new Set(saved.easterEggs);
+      } catch(e) {}
 
-    // Load saved progress
-    const saved = JSON.parse(localStorage.getItem('resume-trees') || '{}');
-    treeAreas.forEach(a => { if (saved[a.id]) a.grown = true; });
+      function saveProgress() {
+        localStorage.setItem('resume-rpg', JSON.stringify({
+          explored: [...state.explored],
+          trees: state.trees,
+          badges: [...state.badges],
+          easterEggs: [...state.easterEggs],
+        }));
+      }
 
-    function updateProgressUI() {
-      treeProgress.innerHTML = treeAreas.map(a =>
-        `<span class="tree-dot ${a.grown ? 'grown' : ''}" title="${a.name}"></span>`
-      ).join('');
-    }
-    updateProgressUI();
+      // ---- Zones / interactive areas ----
+      // Each zone has an element selector, name, type, and interactions
+      const zones = [
+        // Section-level zones
+        { id: 'hero', selector: '.hero', name: '首页', type: 'section',
+          dialogues: ['欢迎来到我的简历！用 WASD 或方向键逛逛吧～', '往下走，看看我的故事 ✨'] },
+        { id: 'about', selector: '#about', name: '关于我', type: 'section',
+          dialogues: ['金融 × 计算机，两个领域都沾一点边 😄', '我的三大关键词：金融思维、技术工具、运营落地'],
+          fruits: ['金融思维', '技术工具', '运营落地'] },
+        { id: 'work', selector: '#work', name: '实习经历', type: 'section',
+          dialogues: ['三段实习，方向越来越清晰', '从交易室到飞书，一直在做 AI + 业务'],
+          fruits: ['飞书AI', '赛事运营', '智能体'] },
+        { id: 'projects', selector: '#projects', name: '代表作品', type: 'section',
+          dialogues: ['这些是我最满意的几个项目', 'AFFT 大赛是我做得最爽的一次！'],
+          fruits: ['AFFT', '智慧假勤', '学创杯'] },
+        { id: 'skills', selector: '#skills', name: '技能地图', type: 'skill',
+          dialogues: ['在这里按空格可以收集技能徽章哦！', '四大技能树，还差几个？'],
+          fruits: ['Python', '飞书AI', 'SQL', '运营'] },
+        { id: 'gallery', selector: '#gallery', name: '照片画廊', type: 'easter',
+          dialogues: ['这里放了一些生活照～', '走到照片旁边看看？📷'],
+          fruits: ['生活', '工作', '旅行'] },
+        { id: 'contact', selector: '#contact', name: '联系我', type: 'easter',
+          dialogues: ['看到这里说明你真的很认真！', '发个邮件认识一下？📮'],
+          fruits: ['邮箱', '电话', 'GitHub'] },
 
-    // Render already-grown trees on load
-    function renderInitialTrees() {
-      treeAreas.forEach(area => {
-        if (area.grown) {
-          const section = document.getElementById(area.id);
-          if (section) {
-            const rect = section.getBoundingClientRect();
-            const treeX = rect.left + rect.width / 2 + window.scrollX;
-            createTreeElement(treeX, area);
+        // Card-level zones (more specific dialogues)
+        { id: 'card-feishu', selector: '.entry-card.featured', name: '飞书 CSM 经历', type: 'card',
+          dialogues: [
+            '4300+ 支队伍的审核，我一个人 3 天就干完了 💪',
+            '7000 人的社群，机器人帮我搞定了一半的咨询',
+            '做 AFFT 那段时间，每天都像在打大仗 🎯'
+          ],
+          fruits: ['AFFT赛事', '7000人社群', '机器人', '智慧假勤'] },
+        { id: 'card-cj', selector: '.entry-card:nth-of-type(2)', name: '长江证券经历', type: 'card',
+          dialogues: [
+            '第一次进交易室，连屏幕都不敢乱碰 😅',
+            '第一次用 Python 分析交易日志，感觉自己像个黑客'
+          ],
+          fruits: ['智能体', '交易系统', 'Python'] },
+        { id: 'card-haoweilai', selector: '.entry-card:nth-of-type(3)', name: '好未来经历', type: 'card',
+          dialogues: [
+            '60+ 个课件，做到最后我都能背下来了',
+            '第一次做 ToB 运营，学会了站在客户角度想问题'
+          ],
+          fruits: ['产品运营', '课件制作', '用户调研'] },
+        { id: 'card-afft', selector: '.project-card.featured', name: 'AFFT 大赛项目', type: 'card',
+          dialogues: [
+            '6900+ 报名，108 家企业，从 0 到 1 全链路做下来',
+            '这是我目前最有成就感的一个项目 🏆'
+          ],
+          fruits: ['赛事运营', '企业拓展', '社群', '机器人'] },
+
+        // Skill badge zones (4 branches)
+        { id: 'badge-ai', selector: '.skill-branch:nth-child(1)', name: 'AI工具徽章', type: 'badge',
+          badge: '🤖', badgeName: 'AI',
+          dialogues: ['按空格收集「AI 工具」徽章！', '飞书 AI + Claude Code，我的日常搭子'] },
+        { id: 'badge-ops', selector: '.skill-branch:nth-child(2)', name: '运营徽章', type: 'badge',
+          badge: '📊', badgeName: '运营',
+          dialogues: ['按空格收集「业务运营」徽章！', '从策划到复盘，一竿子插到底'] },
+        { id: 'badge-data', selector: '.skill-branch:nth-child(3)', name: '数据技术徽章', type: 'badge',
+          badge: '💻', badgeName: '数据',
+          dialogues: ['按空格收集「数据技术」徽章！', 'Python + SQL，分析问题有抓手'] },
+        { id: 'badge-soft', selector: '.skill-branch:nth-child(4)', name: '软技能徽章', type: 'badge',
+          badge: '🎯', badgeName: '软技',
+          dialogues: ['按空格收集「软技能」徽章！', '跨团队协同是我的强项 💪'] },
+      ];
+
+      const BADGE_ORDER = ['badge-ai', 'badge-ops', 'badge-data', 'badge-soft'];
+      const BADGE_ICONS = { 'badge-ai': '🤖', 'badge-ops': '📊', 'badge-data': '💻', 'badge-soft': '🎯' };
+
+      // ---- Initialize HUD ----
+      function initHUD() {
+        // 7 section zones for explore progress
+        const sectionZones = zones.filter(z => z.type === 'section' || z.type === 'easter');
+        hudExplore.innerHTML = sectionZones.map(z =>
+          `<span class="hud-dot ${state.explored.has(z.id) ? 'done' : ''}" title="${z.name}"></span>`
+        ).join('');
+
+        // 7 section zones for tree planting
+        hudTrees.innerHTML = sectionZones.map(z =>
+          `<span class="hud-dot ${state.trees[z.id] ? 'done' : ''}" title="${z.name}"></span>`
+        ).join('');
+
+        // 4 badges
+        hudBadges.innerHTML = BADGE_ORDER.map(id =>
+          `<span class="hud-badge ${state.badges.has(id) ? 'collected' : ''}" title="${zones.find(z=>z.id===id)?.name||''}">${BADGE_ICONS[id]}</span>`
+        ).join('');
+      }
+
+      function updateHUD() {
+        // Update area name
+        if (state.currentZone) {
+          const z = zones.find(zz => zz.id === state.currentZone);
+          if (z) hudArea.textContent = z.name;
+        }
+
+        // Update explore dots
+        const sectionZones = zones.filter(z => z.type === 'section' || z.type === 'easter');
+        const dots = hudExplore.querySelectorAll('.hud-dot');
+        sectionZones.forEach((z, i) => {
+          if (dots[i]) dots[i].classList.toggle('done', state.explored.has(z.id));
+        });
+
+        // Update tree dots
+        const treeDots = hudTrees.querySelectorAll('.hud-dot');
+        sectionZones.forEach((z, i) => {
+          if (treeDots[i]) treeDots[i].classList.toggle('done', !!state.trees[z.id]);
+        });
+
+        // Update badges
+        const badgeEls = hudBadges.querySelectorAll('.hud-badge');
+        BADGE_ORDER.forEach((id, i) => {
+          if (badgeEls[i]) badgeEls[i].classList.toggle('collected', state.badges.has(id));
+        });
+      }
+
+      // ---- Zone detection ----
+      function getZoneRects() {
+        const rects = [];
+        zones.forEach(z => {
+          const el = document.querySelector(z.selector);
+          if (el) {
+            const r = el.getBoundingClientRect();
+            rects.push({
+              id: z.id,
+              x: r.left,
+              y: r.top,
+              w: r.width,
+              h: r.height,
+              zone: z,
+            });
+          }
+        });
+        return rects;
+      }
+
+      function findZoneAt(x, y) {
+        const rects = getZoneRects();
+        // Prefer more specific zones (card/badge > section)
+        const priority = { badge: 0, card: 1, easter: 2, skill: 2, section: 3 };
+        let best = null;
+        let bestPriority = 999;
+
+        for (const r of rects) {
+          if (x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h) {
+            const p = priority[r.zone.type] ?? 10;
+            if (p < bestPriority) {
+              best = r;
+              bestPriority = p;
+            }
           }
         }
-      });
-    }
-
-    function createTreeElement(x, area) {
-      const tree = document.createElement('div');
-      tree.className = 'tree';
-      tree.style.left = x + 'px';
-
-      const trunk = document.createElement('div');
-      trunk.className = 'tree-trunk';
-      const heights = { 'top': 30, 'about': 40, 'work': 60, 'projects': 50, 'skills': 55, 'gallery': 45, 'contact': 50 };
-      trunk.style.height = (heights[area.id] || 40) + 'px';
-
-      const leaves = document.createElement('div');
-      leaves.className = 'tree-leaves';
-      const sizes = { 'top': 30, 'about': 36, 'work': 56, 'projects': 46, 'skills': 50, 'gallery': 42, 'contact': 40 };
-      const s = sizes[area.id] || 40;
-      leaves.style.width = s + 'px';
-      leaves.style.height = s + 'px';
-      leaves.style.bottom = ((heights[area.id] || 40) - 10) + 'px';
-      leaves.style.background = area.color;
-
-      // Add emoji on top for some trees
-      if (area.emoji && area.id !== 'top' && area.id !== 'contact') {
-        const emoji = document.createElement('div');
-        emoji.style.cssText = `position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:${s * 0.5}px;`;
-        emoji.textContent = area.emoji;
-        leaves.appendChild(emoji);
+        return best;
       }
 
-      tree.appendChild(leaves);
-      tree.appendChild(trunk);
-      tree.dataset.area = area.id;
-      treesContainer.appendChild(tree);
-      return tree;
-    }
+      // ---- Dialogue system ----
+      let dialogueTimeout = null;
+      let lastDialogueId = null;
+      let lastDialogueIndex = 0;
 
-    // Character movement
-    function updateChar() {
-      charX = Math.max(12, Math.min(window.innerWidth - 12, charX));
-      gameChar.style.left = charX + 'px';
+      function showDialogue(text) {
+        gameDialogue.textContent = text;
+        gameDialogue.classList.add('show');
+        // Position above character
+        const charRect = gameChar.getBoundingClientRect();
+        gameDialogue.style.left = '50%';
+        gameDialogue.style.top = (charRect.top - 10) + 'px';
+        gameDialogue.style.transform = 'translate(-50%, -100%)';
 
-      // Update current area name
-      const scrollY = window.scrollY;
-      let currentArea = treeAreas[0];
-      treeAreas.forEach(area => {
-        const el = document.getElementById(area.id);
-        if (el) {
-          const top = el.offsetTop - 100;
-          if (scrollY >= top) currentArea = area;
-        }
-      });
-      gameAreaName.textContent = currentArea.name + (currentArea.grown ? ' ✓' : '');
-    }
-
-    function moveChar(dir) {
-      charX += dir * SPEED;
-      if (!isWalking) {
-        isWalking = true;
-        pixelFarmer.classList.add('walking');
+        if (dialogueTimeout) clearTimeout(dialogueTimeout);
+        dialogueTimeout = setTimeout(() => {
+          gameDialogue.classList.remove('show');
+        }, 4000);
       }
-      // Flip character based on direction
-      pixelFarmer.style.transform = dir < 0 ? 'scaleX(-1)' : 'scaleX(1)';
-      updateChar();
-    }
 
-    // Keyboard controls
-    const keys = {};
-    document.addEventListener('keydown', (e) => {
-      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'Space'].includes(e.key) || e.code === 'Space') {
-        e.preventDefault();
-      }
-      keys[e.key] = true;
+      function triggerZoneDialogue(zoneId) {
+        const z = zones.find(zz => zz.id === zoneId);
+        if (!z || !z.dialogues) return;
 
-      if (e.code === 'Space' || e.key === ' ') {
-        plantTree();
-      }
-    });
-    document.addEventListener('keyup', (e) => {
-      keys[e.key] = false;
-      checkWalking();
-    });
+        // Only trigger once per zone entry
+        if (state.currentZone === zoneId) return;
 
-    function checkWalking() {
-      if (!keys['ArrowLeft'] && !keys['ArrowRight'] && !keys['a'] && !keys['d'] && moveDir === 0) {
-        isWalking = false;
-        pixelFarmer.classList.remove('walking');
-      }
-    }
+        state.currentZone = zoneId;
 
-    // Touch controls
-    function startMove(dir) {
-      moveDir = dir;
-      isWalking = true;
-      pixelFarmer.classList.add('walking');
-      pixelFarmer.style.transform = dir < 0 ? 'scaleX(-1)' : 'scaleX(1)';
-    }
-    function stopMove() {
-      moveDir = 0;
-      isWalking = false;
-      pixelFarmer.classList.remove('walking');
-    }
-
-    // Game loop
-    function gameLoop() {
-      if (keys['ArrowLeft'] || keys['a'] || moveDir === -1) {
-        moveChar(-1);
-      }
-      if (keys['ArrowRight'] || keys['d'] || moveDir === 1) {
-        moveChar(1);
-      }
-      requestAnimationFrame(gameLoop);
-    }
-    gameLoop();
-
-    // Plant tree
-    function plantTree() {
-      // Find which section is currently in view
-      const scrollY = window.scrollY + window.innerHeight / 2;
-      let currentArea = null;
-      treeAreas.forEach(area => {
-        const el = document.getElementById(area.id);
-        if (el) {
-          const top = el.offsetTop;
-          const bottom = top + el.offsetHeight;
-          if (scrollY >= top && scrollY < bottom) {
-            currentArea = area;
+        // Mark explored (only section/easter types count for exploration)
+        if (z.type === 'section' || z.type === 'easter') {
+          if (!state.explored.has(zoneId)) {
+            state.explored.add(zoneId);
+            saveProgress();
           }
         }
-      });
 
-      if (!currentArea) {
-        gameAreaName.textContent = '这里不能种树～';
-        setTimeout(() => updateChar(), 1000);
-        return;
+        // Show a random dialogue, cycle through them
+        const idx = Math.floor(Math.random() * z.dialogues.length);
+        if (lastDialogueId === zoneId) {
+          // Same zone, show next dialogue
+          lastDialogueIndex = (lastDialogueIndex + 1) % z.dialogues.length;
+        } else {
+          lastDialogueIndex = idx;
+          lastDialogueId = zoneId;
+        }
+        showDialogue(z.dialogues[lastDialogueIndex]);
+
+        updateHUD();
       }
 
-      if (currentArea.grown) {
-        gameAreaName.textContent = currentArea.name + ' 已经有树啦 ✓';
-        setTimeout(() => updateChar(), 1000);
-        return;
+      function leaveZone() {
+        state.currentZone = null;
+        hudArea.textContent = '探索中';
+        if (dialogueTimeout) {
+          clearTimeout(dialogueTimeout);
+          gameDialogue.classList.remove('show');
+        }
       }
 
-      // Plant at current character position
-      currentArea.grown = true;
-      createTreeElement(charX, currentArea);
+      // ---- Tree planting ----
+      function plantTree() {
+        // Find current section zone (not card)
+        const sectionZones = zones.filter(z => z.type === 'section' || z.type === 'easter');
+        let currentSection = null;
+        const rects = getZoneRects();
 
-      // Save
-      const toSave = {};
-      treeAreas.forEach(a => { if (a.grown) toSave[a.id] = true; });
-      localStorage.setItem('resume-trees', JSON.stringify(toSave));
+        for (const r of rects) {
+          if (r.zone.type !== 'section' && r.zone.type !== 'easter') continue;
+          if (state.x >= r.x && state.x <= r.x + r.w &&
+              state.y >= r.y && state.y <= r.y + r.h) {
+            currentSection = r.zone;
+            break;
+          }
+        }
 
-      updateProgressUI();
-      gameAreaName.textContent = '🌱 种了一棵' + currentArea.name + '之树！';
+        if (!currentSection) {
+          showDialogue('这里不能种树哦，走到板块里试试～');
+          return;
+        }
 
-      // Check completion
-      if (treeAreas.every(a => a.grown)) {
-        setTimeout(triggerCelebration, 500);
+        if (state.trees[currentSection.id]) {
+          showDialogue(currentSection.name + ' 已经有树啦 🌳');
+          return;
+        }
+
+        // Plant the tree at character position
+        state.trees[currentSection.id] = {
+          x: state.x,
+          y: state.y,
+          zoneId: currentSection.id,
+        };
+        saveProgress();
+
+        createTreeElement(state.trees[currentSection.id], currentSection);
+        showDialogue('🌱 种了一棵' + currentSection.name + '之树！');
+
+        updateHUD();
+        checkCompletion();
       }
 
-      setTimeout(() => updateChar(), 1500);
-    }
+      function createTreeElement(treeData, zone) {
+        const tree = document.createElement('div');
+        tree.className = 'game-tree';
+        tree.style.left = (treeData.x - 30) + 'px';
+        tree.style.top = (treeData.y - 60) + 'px';
 
-    // Celebration
-    function triggerCelebration() {
-      celebration.classList.add('active');
+        const trunk = document.createElement('div');
+        trunk.className = 'game-tree-trunk';
+        const trunkH = 40;
+        trunk.style.height = trunkH + 'px';
 
-      // Confetti
-      const colors = ['var(--accent)', 'var(--accent-2)', 'var(--accent-3)', 'var(--accent-4)', 'var(--sky)'];
-      for (let i = 0; i < 50; i++) {
-        const c = document.createElement('div');
-        c.className = 'confetti';
-        c.style.left = Math.random() * 100 + '%';
-        c.style.background = `hsl(${Math.random() * 360}, 80%, 65%)`;
-        c.style.animationDelay = Math.random() * 0.5 + 's';
-        c.style.animationDuration = (2 + Math.random() * 2) + 's';
-        celebration.appendChild(c);
+        const leaves = document.createElement('div');
+        leaves.className = 'game-tree-leaves';
+        const leafSize = 56;
+        leaves.style.width = leafSize + 'px';
+        leaves.style.height = leafSize + 'px';
+        leaves.style.bottom = (trunkH - 10) + 'px';
+
+        // Color by zone type
+        const colors = {
+          'hero': 'var(--accent-2)',
+          'about': 'var(--accent-3)',
+          'work': 'var(--accent-3)',
+          'projects': 'var(--accent)',
+          'skills': 'var(--accent-4)',
+          'easter': 'var(--sky)',
+        };
+        leaves.style.background = colors[zone.type] || 'var(--accent-3)';
+
+        // Fruits container
+        const fruitsContainer = document.createElement('div');
+        fruitsContainer.className = 'game-tree-fruits';
+
+        const fruits = zone.fruits || [];
+        fruits.forEach((fruit, i) => {
+          const f = document.createElement('div');
+          f.className = 'tree-fruit';
+          f.textContent = fruit;
+          // Position around the leaves
+          const angle = (i / fruits.length) * Math.PI * 2 - Math.PI / 2;
+          const radius = leafSize * 0.5 + 10;
+          const fx = Math.cos(angle) * radius + leafSize / 2 + 20 - 10;
+          const fy = Math.sin(angle) * radius + leafSize / 2 + 20 - 10;
+          f.style.left = (fx + 10) + 'px';
+          f.style.top = (fy + 20) + 'px';
+          f.style.animationDelay = (0.6 + i * 0.1) + 's';
+          fruitsContainer.appendChild(f);
+        });
+
+        leaves.appendChild(fruitsContainer);
+        tree.appendChild(leaves);
+        tree.appendChild(trunk);
+        treesLayer.appendChild(tree);
       }
 
-      setTimeout(() => {
-        celebration.classList.remove('active');
+      function renderAllTrees() {
+        treesLayer.innerHTML = '';
+        Object.values(state.trees).forEach(treeData => {
+          const zone = zones.find(z => z.id === treeData.zoneId);
+          if (zone) createTreeElement(treeData, zone);
+        });
+      }
+
+      // ---- Badge collection ----
+      function collectBadge(zoneId) {
+        if (state.badges.has(zoneId)) {
+          const z = zones.find(zz => zz.id === zoneId);
+          showDialogue('已经收集过「' + z.badgeName + '」徽章啦 ✓');
+          return;
+        }
+
+        state.badges.add(zoneId);
+        saveProgress();
+
+        const z = zones.find(zz => zz.id === zoneId);
+        showDialogue('🏅 获得「' + z.badgeName + '」技能徽章！');
+
+        updateHUD();
+
+        // Check if all badges collected
+        if (state.badges.size >= BADGE_ORDER.length) {
+          setTimeout(() => {
+            showDialogue('🎉 集齐所有技能徽章！你是技能大师！');
+          }, 1500);
+        }
+      }
+
+      // ---- Easter eggs ----
+      function triggerEasterEgg(eggId) {
+        if (state.easterEggs.has(eggId)) return;
+        state.easterEggs.add(eggId);
+        saveProgress();
+
+        if (eggId === 'gallery') {
+          // Shake a random gallery item
+          const items = document.querySelectorAll('.gallery-item');
+          if (items.length) {
+            const item = items[Math.floor(Math.random() * items.length)];
+            item.style.transition = 'transform 0.3s ease';
+            item.style.transform = 'rotate(-5deg) scale(1.05)';
+            setTimeout(() => { item.style.transform = 'rotate(5deg) scale(1.05)'; }, 150);
+            setTimeout(() => { item.style.transform = ''; }, 300);
+          }
+        }
+
+        if (eggId === 'contact') {
+          // Rain contact papers
+          const contacts = ['📧 18064009641@163.com', '📱 180-6400-9641', '🐙 GitHub: Algernon8'];
+          for (let i = 0; i < 12; i++) {
+            const paper = document.createElement('div');
+            paper.className = 'float-paper';
+            paper.textContent = contacts[i % contacts.length];
+            paper.style.left = (Math.random() * 100) + '%';
+            paper.style.animationDelay = (Math.random() * 1.5) + 's';
+            paper.style.animationDuration = (3 + Math.random() * 2) + 's';
+            document.body.appendChild(paper);
+            setTimeout(() => paper.remove(), 5000);
+          }
+        }
+
+        if (eggId === 'stats') {
+          // Re-trigger counter animation
+          document.querySelectorAll('.stat-num[data-count]').forEach(el => {
+            el.textContent = '0';
+            const observer = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  animateCounter(el);
+                  observer.disconnect();
+                }
+              });
+            }, { threshold: 0.5 });
+            observer.observe(el);
+          });
+        }
+      }
+
+      // ---- Completion check ----
+      function checkCompletion() {
+        const sectionZones = zones.filter(z => z.type === 'section' || z.type === 'easter');
+        const allTrees = sectionZones.every(z => state.trees[z.id]);
+        if (allTrees && !state.easterEggs.has('completion')) {
+          state.easterEggs.add('completion');
+          saveProgress();
+          setTimeout(triggerCelebration, 500);
+        }
+      }
+
+      function triggerCelebration() {
+        celebration.classList.add('active');
+        const colors = ['#e85f38', '#ffb84d', '#77a86a', '#7b5bd6', '#80c7e8', '#ff855d'];
+        for (let i = 0; i < 80; i++) {
+          const c = document.createElement('div');
+          c.className = 'confetti';
+          c.style.left = Math.random() * 100 + '%';
+          c.style.background = colors[Math.floor(Math.random() * colors.length)];
+          c.style.animationDelay = Math.random() * 1 + 's';
+          c.style.animationDuration = (2 + Math.random() * 2.5) + 's';
+          celebration.appendChild(c);
+        }
         setTimeout(() => {
-          celebration.querySelectorAll('.confetti').forEach(c => c.remove());
-        }, 500);
-      }, 5000);
-    }
+          celebration.classList.remove('active');
+          setTimeout(() => {
+            celebration.querySelectorAll('.confetti').forEach(c => c.remove());
+          }, 500);
+        }, 6000);
+      }
 
-    // Init
-    window.addEventListener('load', () => {
-      updateChar();
-      setTimeout(renderInitialTrees, 100);
-    });
+      // ---- Movement ----
+      const keys = {};
 
-    window.addEventListener('scroll', updateChar);
-    window.addEventListener('resize', updateChar);
+      function setFacing(dx, dy) {
+        if (Math.abs(dx) > Math.abs(dy)) {
+          state.facing = dx > 0 ? 'right' : 'left';
+        } else {
+          state.facing = dy > 0 ? 'down' : 'up';
+        }
 
-    // Re-render trees on scroll (recalculate positions relative to viewport)
-    // Actually trees are fixed-position so they move with scroll — we need them to stay
-    // at their section positions. Let's use position:absolute in game-bar instead.
-    // For simplicity: trees are fixed and stay at their x positions on screen.
-    // They're planted at the character's position which is screen-relative.
-    // This is fine for a fun mini-game effect.
+        if (state.facing === 'left') {
+          pixelHero.classList.add('face-left');
+          pixelHero.classList.remove('face-right');
+        } else {
+          pixelHero.classList.add('face-right');
+          pixelHero.classList.remove('face-left');
+        }
+      }
+
+      function moveChar(dx, dy) {
+        const newX = state.x + dx;
+        const newY = state.y + dy;
+
+        // Boundary check (stay within viewport)
+        if (newX < 16 || newX > window.innerWidth - 16) return;
+        if (newY < 16 || newY > window.innerHeight - 16) return;
+
+        state.x = newX;
+        state.y = newY;
+        gameChar.style.left = state.x + 'px';
+        gameChar.style.top = state.y + 'px';
+
+        // Auto-scroll when near edges
+        const edgeMargin = 120;
+        let scrollX = 0, scrollY = 0;
+
+        if (state.y < edgeMargin) scrollY = -(edgeMargin - state.y) * 0.3;
+        if (state.y > window.innerHeight - edgeMargin) scrollY = (state.y - (window.innerHeight - edgeMargin)) * 0.3;
+        if (state.x < edgeMargin) scrollX = -(edgeMargin - state.x) * 0.3;
+        if (state.x > window.innerWidth - edgeMargin) scrollX = (state.x - (window.innerWidth - edgeMargin)) * 0.3;
+
+        if (scrollY !== 0) window.scrollBy(0, scrollY);
+        if (scrollX !== 0) window.scrollBy(scrollX, 0);
+
+        // Walking animation
+        if (!state.walking) {
+          state.walking = true;
+          pixelHero.classList.add('walking');
+        }
+
+        setFacing(dx, dy);
+        checkZoneCollision();
+      }
+
+      function stopWalking() {
+        state.walking = false;
+        pixelHero.classList.remove('walking');
+      }
+
+      function checkZoneCollision() {
+        const zone = findZoneAt(state.x, state.y);
+        if (zone) {
+          triggerZoneDialogue(zone.id);
+
+          // Easter egg triggers
+          if (zone.zone.id === 'gallery') triggerEasterEgg('gallery');
+          if (zone.zone.id === 'contact') triggerEasterEgg('contact');
+        } else {
+          leaveZone();
+        }
+      }
+
+      // ---- Action (space key) ----
+      function gameAction() {
+        const zone = findZoneAt(state.x, state.y);
+        if (!zone) {
+          plantTree(); // Try planting anywhere (will show message if not in section)
+          return;
+        }
+
+        if (zone.zone.type === 'badge') {
+          collectBadge(zone.id);
+        } else {
+          plantTree();
+        }
+      }
+      window.gameAction = gameAction;
+
+      // ---- Keyboard controls ----
+      document.addEventListener('keydown', (e) => {
+        // Space = action
+        if (e.code === 'Space' || e.key === ' ') {
+          e.preventDefault();
+          if (!e.repeat) gameAction();
+          return;
+        }
+
+        keys[e.key.toLowerCase()] = true;
+
+        // Hide hint on first move
+        if (gameHint && !gameHint.classList.contains('hide')) {
+          gameHint.classList.add('hide');
+          setTimeout(() => gameHint.style.display = 'none', 600);
+        }
+      });
+
+      document.addEventListener('keyup', (e) => {
+        keys[e.key.toLowerCase()] = false;
+        if (!keys['arrowup'] && !keys['arrowdown'] && !keys['arrowleft'] && !keys['arrowright'] &&
+            !keys['w'] && !keys['a'] && !keys['s'] && !keys['d']) {
+          stopWalking();
+        }
+      });
+
+      // ---- Touch controls (exposed globally) ----
+      const touchDir = { x: 0, y: 0 };
+      window.gameStartMove = function(dx, dy) {
+        touchDir.x += dx;
+        touchDir.y += dy;
+        if (gameHint && !gameHint.classList.contains('hide')) {
+          gameHint.classList.add('hide');
+        }
+      };
+      window.gameStopMove = function(dx, dy) {
+        touchDir.x -= dx;
+        touchDir.y -= dy;
+        if (touchDir.x === 0 && touchDir.y === 0) stopWalking();
+      };
+
+      // ---- Game loop ----
+      function gameLoop() {
+        let dx = 0, dy = 0;
+
+        // Keyboard
+        if (keys['arrowleft'] || keys['a']) dx -= state.speed;
+        if (keys['arrowright'] || keys['d']) dx += state.speed;
+        if (keys['arrowup'] || keys['w']) dy -= state.speed;
+        if (keys['arrowdown'] || keys['s']) dy += state.speed;
+
+        // Touch
+        dx += touchDir.x * state.speed;
+        dy += touchDir.y * state.speed;
+
+        // Normalize diagonal
+        if (dx !== 0 && dy !== 0) {
+          dx *= 0.707;
+          dy *= 0.707;
+        }
+
+        if (dx !== 0 || dy !== 0) {
+          moveChar(dx, dy);
+        } else if (state.walking) {
+          stopWalking();
+        }
+
+        requestAnimationFrame(gameLoop);
+      }
+
+      // ---- Init ----
+      function init() {
+        initHUD();
+        gameChar.style.left = state.x + 'px';
+        gameChar.style.top = state.y + 'px';
+        renderAllTrees();
+        gameLoop();
+
+        // Hide hint after 5 seconds
+        setTimeout(() => {
+          if (gameHint && !gameHint.classList.contains('hide')) {
+            gameHint.classList.add('hide');
+            setTimeout(() => gameHint.style.display = 'none', 600);
+          }
+        }, 6000);
+
+        // Re-render trees on scroll (they stay at fixed positions which is fine for fun effect)
+        // For the purpose of this game, trees stay where they were planted on screen
+      }
+
+      // Wait for fonts/images then init
+      if (document.readyState === 'complete') {
+        init();
+      } else {
+        window.addEventListener('load', init);
+      }
+
+      // Handle resize - keep character in bounds
+      window.addEventListener('resize', () => {
+        state.x = Math.min(state.x, window.innerWidth - 16);
+        state.y = Math.min(state.y, window.innerHeight - 16);
+        gameChar.style.left = state.x + 'px';
+        gameChar.style.top = state.y + 'px';
+      });
+    })();
   </script>
 </body>
 </html>
