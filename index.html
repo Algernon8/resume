@@ -1194,15 +1194,34 @@
       bottom: 16px;
       left: 16px;
       z-index: 40;
-      padding: 12px 14px;
+      padding: 10px 12px 12px;
       border: 3px solid var(--line);
       background: var(--paper);
       box-shadow: var(--pixel-shadow-soft);
       font-size: 12px;
       font-weight: 900;
-      min-width: 220px;
+      min-width: 200px;
       pointer-events: auto;
+      touch-action: none;
     }
+    .hud-drag-handle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin: -10px -12px 8px;
+      padding: 6px 10px;
+      background: var(--paper-2);
+      border-bottom: 2px solid var(--line);
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+    .hud-drag-handle:active { cursor: grabbing; }
     /* Tree detail card (draggable) */
     #treeDetail {
       position: fixed;
@@ -2167,6 +2186,11 @@
 
   <!-- HUD -->
   <div id="gameHud">
+    <div class="hud-drag-handle" id="hudDragHandle">
+      <span>⋮⋮</span>
+      <span style="font-size:11px;font-weight:900;color:var(--muted);">探索面板</span>
+      <span>⋮⋮</span>
+    </div>
     <div class="hud-row">
       <span class="hud-label">探索</span>
       <div class="hud-progress" id="hudExplore"></div>
@@ -3338,6 +3362,135 @@
             // Show confirmation
             showDialogue('🗑️ 所有树都清空了，重新种吧！');
           });
+        }
+
+        // ---- HUD drag to move ----
+        const hud = document.getElementById('gameHud');
+        const hudHandle = document.getElementById('hudDragHandle');
+        if (hud && hudHandle) {
+          let hudDragging = false;
+          let hudStartX = 0, hudStartY = 0;
+          let hudStartLeft = 0, hudStartBottom = 0;
+          let hudSettled = false;
+
+          // Load saved position
+          const savedHud = localStorage.getItem('resume-hud-pos');
+          if (savedHud) {
+            try {
+              const pos = JSON.parse(savedHud);
+              hud.style.left = pos.left + 'px';
+              hud.style.top = pos.top + 'px';
+              hud.style.right = 'auto';
+              hud.style.bottom = 'auto';
+              hudSettled = true;
+            } catch(e) {}
+          }
+
+          function startHudDrag(cx, cy) {
+            hudDragging = true;
+            hudStartX = cx;
+            hudStartY = cy;
+            const rect = hud.getBoundingClientRect();
+            hudStartLeft = rect.left;
+            hudStartBottom = window.innerHeight - rect.bottom;
+            // Switch to top/left positioning
+            hud.style.top = rect.top + 'px';
+            hud.style.left = rect.left + 'px';
+            hud.style.bottom = 'auto';
+            hud.style.right = 'auto';
+          }
+
+          function moveHudDrag(cx, cy) {
+            if (!hudDragging) return;
+            let nl = hudStartLeft + (cx - hudStartX);
+            let nt = hudStartY !== undefined ? (hudStartBottom !== undefined ? 0 : 0) : 0;
+            // Calculate from start position properly
+            const startTop = parseFloat(hud.style.top) || hud.getBoundingClientRect().top;
+            // Actually let's recalc:
+            const rect = hud.getBoundingClientRect();
+            nl = hudStartLeft + (cx - hudStartX);
+            let topNow = rect.top + (cy - hudStartY);
+            // Clamp to viewport
+            nl = Math.max(0, Math.min(nl, window.innerWidth - hud.offsetWidth));
+            topNow = Math.max(0, Math.min(topNow, window.innerHeight - hud.offsetHeight));
+            hud.style.left = nl + 'px';
+            hud.style.top = topNow + 'px';
+            hud.style.bottom = 'auto';
+            hud.style.right = 'auto';
+            hudSettled = true;
+          }
+
+          function endHudDrag() {
+            if (!hudDragging) return;
+            hudDragging = false;
+            // Save position
+            const rect = hud.getBoundingClientRect();
+            localStorage.setItem('resume-hud-pos', JSON.stringify({
+              left: Math.round(rect.left),
+              top: Math.round(rect.top),
+            }));
+          }
+
+          // Mouse
+          hudHandle.addEventListener('mousedown', (e) => {
+            hudStartX = e.clientX;
+            hudStartY = e.clientY;
+            const rect = hud.getBoundingClientRect();
+            hudStartLeft = rect.left;
+            hudStartBottom = window.innerHeight - rect.bottom;
+            hudDragging = true;
+            hud.style.top = rect.top + 'px';
+            hud.style.left = rect.left + 'px';
+            hud.style.bottom = 'auto';
+            e.preventDefault();
+          });
+          document.addEventListener('mousemove', (e) => {
+            if (!hudDragging) return;
+            let nl = hudStartLeft + (e.clientX - hudStartX);
+            let nt = hud.getBoundingClientRect().top + (e.clientY - hudStartY);
+            nl = Math.max(0, Math.min(nl, window.innerWidth - hud.offsetWidth));
+            nt = Math.max(0, Math.min(nt, window.innerHeight - hud.offsetHeight));
+            hud.style.left = nl + 'px';
+            hud.style.top = nt + 'px';
+            hud.style.bottom = 'auto';
+            hudSettled = true;
+            // Update start for next move delta
+            hudStartX = e.clientX;
+            hudStartY = e.clientY;
+            hudStartLeft = nl;
+          });
+          document.addEventListener('mouseup', endHudDrag);
+
+          // Touch
+          hudHandle.addEventListener('touchstart', (e) => {
+            const t = e.touches[0];
+            hudStartX = t.clientX;
+            hudStartY = t.clientY;
+            const rect = hud.getBoundingClientRect();
+            hudStartLeft = rect.left;
+            hudDragging = true;
+            hud.style.top = rect.top + 'px';
+            hud.style.left = rect.left + 'px';
+            hud.style.bottom = 'auto';
+            e.preventDefault();
+          }, { passive: false });
+          document.addEventListener('touchmove', (e) => {
+            if (!hudDragging) return;
+            const t = e.touches[0];
+            let nl = hudStartLeft + (t.clientX - hudStartX);
+            let nt = hud.getBoundingClientRect().top + (t.clientY - hudStartY);
+            nl = Math.max(0, Math.min(nl, window.innerWidth - hud.offsetWidth));
+            nt = Math.max(0, Math.min(nt, window.innerHeight - hud.offsetHeight));
+            hud.style.left = nl + 'px';
+            hud.style.top = nt + 'px';
+            hud.style.bottom = 'auto';
+            hudSettled = true;
+            hudStartX = t.clientX;
+            hudStartY = t.clientY;
+            hudStartLeft = nl;
+            e.preventDefault();
+          }, { passive: false });
+          document.addEventListener('touchend', endHudDrag);
         }
 
         // Hide hint after 5 seconds
