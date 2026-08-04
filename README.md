@@ -103,5 +103,6 @@ resume/
 
 ## 📮 联系
 
+- 手机号：18064009641
 - 邮箱：18064009641@163.com
 - GitHub：[@Algernon8](https://github.com/Algernon8)
