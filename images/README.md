@@ -12,7 +12,7 @@
 | `photo-3.jpg` | 生活照 3 | 方形 |
 | `project-afft.jpg` | AFFT 项目封面 | 横图 800x400 |
 | `project-absence.jpg` | 智慧假勤项目封面 | 横图 800x400 |
-| `project-ai.jpg` | 长江灵瞳项目封面 | 横图 800x400 |
+| `project-ai.jpg` | 长江灵曦项目封面 | 横图 800x400 |
 | `project-competition.jpg` | 学创杯项目封面 | 横图 800x400 |
 
 没有上传的图片会自动显示占位符，不影响页面显示。
