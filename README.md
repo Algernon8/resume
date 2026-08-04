@@ -24,7 +24,7 @@ resume/
 │   ├── photo-3.jpg     # 生活照 3
 │   ├── project-afft.jpg       # AFFT 项目封面
 │   ├── project-absence.jpg    # 智慧假勤项目封面
-│   ├── project-ai.jpg         # 长江灵瞳项目封面
+│   ├── project-ai.jpg         # 长江灵曦项目封面
 │   └── project-competition.jpg # 学创杯项目封面
 └── gallery/            # 画廊照片（命名 1.jpg, 2.jpg ... 9.jpg）
     ├── 1.jpg
@@ -56,7 +56,7 @@ resume/
 |------|----------|----------|
 | `project-afft.jpg` | AFFT 大赛 | 800x400，横图 |
 | `project-absence.jpg` | 智慧假勤系统 | 800x400，横图 |
-| `project-ai.jpg` | 长江灵瞳智能体 | 800x400，横图 |
+| `project-ai.jpg` | 长江灵曦智能体 | 800x400，横图 |
 | `project-competition.jpg` | 学创杯 | 800x400，横图 |
 
 ### 画廊照片
