@@ -843,7 +843,7 @@
     }
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 14px;
     }
     .gallery-item {
@@ -2064,39 +2064,18 @@
         <p class="section-desc">记录工作与生活中的片段。</p>
       </div>
       <div>
-        <div class="gallery-note reveal">
-          💡 上传照片到仓库 <code>gallery/</code> 目录（命名为 1.jpg, 2.jpg...）即可自动显示。
-          支持 .jpg / .png / .mp4 格式。
-        </div>
         <div class="gallery-grid">
-          <!-- 1-6: 图片 -->
           <div class="gallery-item reveal" onclick="openLightbox(this)">
-            <img src="./gallery/1.jpg" alt="画廊1" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/1.jpg</div></div>'" />
+            <img src="./gallery/1.jpg" alt="画廊照片 1" />
           </div>
           <div class="gallery-item reveal reveal-delay-1" onclick="openLightbox(this)">
-            <img src="./gallery/2.jpg" alt="画廊2" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/2.jpg</div></div>'" />
+            <img src="./gallery/2.jpg" alt="画廊照片 2" />
           </div>
           <div class="gallery-item reveal reveal-delay-2" onclick="openLightbox(this)">
-            <img src="./gallery/3.jpg" alt="画廊3" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/3.jpg</div></div>'" />
+            <img src="./gallery/3.jpg" alt="画廊照片 3" />
           </div>
           <div class="gallery-item reveal" onclick="openLightbox(this)">
-            <img src="./gallery/4.jpg" alt="画廊4" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/4.jpg</div></div>'" />
-          </div>
-          <div class="gallery-item reveal reveal-delay-1" onclick="openLightbox(this)">
-            <img src="./gallery/5.jpg" alt="画廊5" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/5.jpg</div></div>'" />
-          </div>
-          <div class="gallery-item reveal reveal-delay-2" onclick="openLightbox(this)">
-            <img src="./gallery/6.jpg" alt="画廊6" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/6.jpg</div></div>'" />
-          </div>
-          <!-- 7-9: 更多 -->
-          <div class="gallery-item reveal" onclick="openLightbox(this)">
-            <img src="./gallery/7.jpg" alt="画廊7" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/7.jpg</div></div>'" />
-          </div>
-          <div class="gallery-item reveal reveal-delay-1" onclick="openLightbox(this)">
-            <img src="./gallery/8.jpg" alt="画廊8" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📷</div><div>gallery/8.jpg</div></div>'" />
-          </div>
-          <div class="gallery-item reveal reveal-delay-2" onclick="openLightbox(this)">
-            <img src="./gallery/9.jpg" alt="画廊9" onerror="this.parentElement.innerHTML='<div class=\'gallery-placeholder\'><div class=\'gallery-placeholder-icon\'>📹</div><div>gallery/9.mp4</div></div>'" />
+            <img src="./gallery/4.jpg" alt="画廊照片 4" />
           </div>
         </div>
       </div>
